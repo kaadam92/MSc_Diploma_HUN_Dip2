@@ -1,0 +1,37 @@
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\selecthungarian
+
+%----------------------------------------------------------------------------
+% Abstract in Hungarian
+%----------------------------------------------------------------------------
+\chapter*{Kivonat}\addcontentsline{toc}{chapter}{Kivonat}
+
+A teljesítmény-elektronikai eszközök mindig is jelentős szerepet töltöttek be az iparban és mindennapjainkban. Gondoljunk csak a telefonunk töltőjére, vagy bármilyen háztartási eszközünk tápegységére. Ipari területen is szükség van hajtásvezérlő elemekre (pl. frekvenciaváltók), vagy nagy teljesítményű tápegységekre, különböző hálózatjavító eszközökre. Napjainkban egyre inkább elterjedőben vannak az elektromos hajtású járművek is, illetve a megújuló energiaforrásokból előállított energiát is a hálózatba kell juttatni, pl. szolár-inverterekkel.
+
+A dolgozat az ilyen eszközök fejlesztésének egy módjáról, nevezetesen a Hardware in the Loop szimulációról értekezik. A módszer lehetőséget biztosít a mérnökök számára, hogy párhuzamosítsák a szofver és hardware tervezési feladatokat. Ehhez implementálni kell hozni a fizikai eszköz modelljét, majd ezt a modellt, a megfelelő szimulációs lépésköz elérése érdekében valamilyen céleszközön, többnyire FPGA-n futtatni. Szükség van továbbá arra, hogy a folyamatot meg is tudjuk figyelni, a folyamat paramétereit megfelelő felbontással ki tudjuk olvasni, hogy validálni tudjuk a működést. A külső hardware-en való futás további előnye, hogy akár a végleges elkészült vezérlő elektronikát is összeköthetjük a szimulációt végző FPGA-val. Így annélkül tudjuk tesztelni a kész terméket, hogy a valós főköri elemeket biztosan nem éri károsodás, illetve a valós teljesítmény sem jelenik meg, így egy esetleges fel nem tárt hibát anyagi és fizikai kockázatok nélkül tudunk felderíteni.
+
+A tárgyalás kitér egy ilyen szimulációs környezet felépítésére, annak nehézségeire. Példaképp bemutat néhány alkalmazást, illetve rávilágít a módszer korlátaira is.
+
+
+\vfill
+\selectenglish
+
+
+%----------------------------------------------------------------------------
+% Abstract in English
+%----------------------------------------------------------------------------
+\chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
+
+Same in English.
+
+
+
+
+\vfill
+\selectthesislanguage
+
+\newcounter{romanPage}
+\setcounter{romanPage}{\value{page}}
+\stepcounter{romanPage}
