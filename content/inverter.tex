@@ -1,6 +1,13 @@
 \chapter{Egy frekvenciaváltó tervezése}
 
 \paragraph{}
+
+A napjainkban használt villamos gépeket az alábbiak szerint csoportosítjhatjuk:
+
+\missingfigure{villamos gépek}
+
+Amikor Tesla előállt az első háromfázisú indukciós motorral 1888-ban, nyilvánvalóvá vált, hogy az ilyen típusú gépek megbízhatóbbak és gazdaságosabbak tudnak lenni, mint az egyenáramú motorok. Jelentős hátrányuk azonban, hogy a vezérlésükhöz háromfázisú feszültséget kell előállítani, mely akkoriban cska egy szintén háromfázisú generátor segítségével volt megoldható. Manapság a háromfázisú teljesítmény a villamos hálózatnak köszönhetően rendelkezésre áll, azonban még így is vet fel prooblémákat ezen motorok üzemeltetése.
+
 A frekvenciaváltó egy olyan eszköz mely váltakozó áramú bemenetből váltakozó áramú kimenetet állít elő, mint ahogy a neve is mutatja, más frekvenciával vagy akár feszültséggel, mint a bemenet. Erre azért van szükség, mert a meghajtani kívánt folyamatnak nagyon valószínű, hogy más igényei vannak, mint amit a hálózat önmagában képes biztosítani. Értem ez alatt azt, hogy közvetlen összeköttetés esetén a motorunk $50\ Hz-el$, vagy ennek egész számú hányadosával tudna forogni, illetve ennek a paraméter a befolyásolása fizikailag csak a motor módosításával lehetséges. Természetesen mint az ipar és az élet minden szegmensében itt is célunk a feladat minél hatékonyabb végrehajtása. A világon a teljes villamosenergia felhasználás mint egy $25\ \%-$-át adják a villamos hajtások és ez a szám folyamatosan nő (pl. az elektromos közlekedés térnyerésével). Az igény tehát nyilvánvaló ezeknek az eszközöknek a folyamatos fejlesztésére.
 
 \begin{figure}[!h]
@@ -10,8 +17,57 @@ A frekvenciaváltó egy olyan eszköz mely váltakozó áramú bemenetből vált
 	\label{fig:vfd_system}
 \end{figure}
 
+Az eszköz feladatát jól összefoglalja \aref{fig:vfd_system} ábra. A hálózatból érkező teljesítményt, a felhasználó által megadott paraméterekkel átalakítjuk, majd a terhelő gépet meghajtuk vele. A modern hajtások ennél jóval szofisztikáltabb működésre is képesek, gondoljunk itt akár távfelügyeletre, identifikációra, vagy esetleg akár vezeték nélküli hozzáférésre.
+
 \paragraph{}
-A korábban az ilyen teljesítmény átalakítási feladatokat elektromechanikus berendezésekkel oldották meg, nevezetesen egy motor és generátor párral, ahol is a megfelelő póluspár arány kiválasztásával a frekvenciát módosítani lehetett. Amennyiben szükséges volt feszültségmódosítás is, megfelelő áttételű transzformátor segítségével valósították meg. Ezt követően megjelentek a vákumcsöves eszközök, azonban az igazi áttörést a teljesítményelektronikai félvezető elemek megjelenése okozta. 
+A korábban az ilyen teljesítmény átalakítási feladatokat elektromechanikus berendezésekkel oldották meg, nevezetesen egy motor és generátor párral, ahol is a megfelelő póluspár arány kiválasztásával a frekvenciát módosítani lehetett. Amennyiben szükséges volt feszültségmódosítás is, megfelelő áttételű transzformátor segítségével valósították meg. Ennek a megoldásnak hátránya a nagy teljesítmény esetén nagy méretű villamos gép, ennek megfelelően a kicsi teljesítménysűrűség. A megbízhatóságot csökkenti a mozgó alaktrészek jelenléte és folyamatos igénybevétele, illetve a nagy forgó tömeg is hordoz magában veszélyeket. Ezt követően megjelentek a vákumcsöves eszközök, azonban az igazi áttörést a teljesítményelektronikai félvezető elemek megjelenése okozta.
+
+Ezek a modern eszközök már tartalmaznak mozgó alakrészt (feltéve persze, hogy a reléket és kontaktorokat nem számmítjuk). A félvezető technológia fejlődésével egyre nagyobb és nagyobb teljesítménysűrűségeket tudunk elérni.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width = \textwidth]{figures/topologies.jpg}
+	\caption{A frekvenciaváltó szerepe} 
+	\label{fig:topologies}
+\end{figure}
+
+\Aref{fig:topologies} ábrán láthatjuk a napjainkban elterjedt inverter típusokat. Az ábrában szürkével kiemeltem a Hyundai által fejlesztett típust.
+
+\section{Termék specifikáció}
+
+A Hyundai által jelenleg fejlesztett frekvenciaváltó család kis feszültségű, általános célú PWM vezérlet IGBT kapcsolóelemű 2 szintű inverteres frekvenciaváltó, passzív front-end-el, azaz a hálózatra nem tud visszatáplálni.
+
+\begin{table}[]
+\centering
+\begin{tabular}{|
+>{\columncolor[HTML]{EFEFEF}}c |c|c|c|l}
+\cline{1-4}
+\textbf{Név} & \cellcolor[HTML]{EFEFEF}\textbf{Teljesítmény (kW)} & \cellcolor[HTML]{EFEFEF}\textbf{Áram (A)} & \cellcolor[HTML]{EFEFEF}\textbf{Tömeg (kg)} &  \\ \cline{1-4}
+\cellcolor[HTML]{EFEFEF} & 0,55 & 3,7 &  &  \\ \cline{2-3}
+\cellcolor[HTML]{EFEFEF} & 0,75 & 4,8 &  &  \\ \cline{2-3}
+\cellcolor[HTML]{EFEFEF} & 1,1 & 6,6 &  &  \\ \cline{2-3}
+\multirow{-4}{*}{\cellcolor[HTML]{EFEFEF}\textbf{FR1}} & 1,5 & 8 & \multirow{-4}{*}{6} &  \\ \cline{1-4}
+\cellcolor[HTML]{EFEFEF} & 2,2 & 11 &  &  \\ \cline{2-3}
+\cellcolor[HTML]{EFEFEF} & 3,7 & 18 &  &  \\ \cline{2-3}
+\multirow{-3}{*}{\cellcolor[HTML]{EFEFEF}\textbf{FR2}} & 5,5 & 25 & \multirow{-3}{*}{10} &  \\ \cline{1-4}
+\cellcolor[HTML]{EFEFEF} & 7,5 & 31 &  &  \\ \cline{2-3}
+\multirow{-2}{*}{\cellcolor[HTML]{EFEFEF}\textbf{FR3}} & 11 & 48 & \multirow{-2}{*}{20} &  \\ \cline{1-4}
+\cellcolor[HTML]{EFEFEF} & 15 & 62 &  &  \\ \cline{2-3}
+\cellcolor[HTML]{EFEFEF} & 18,5 & 75 &  &  \\ \cline{2-3}
+\multirow{-3}{*}{\cellcolor[HTML]{EFEFEF}\textbf{FR4}} & 22 & 88 & \multirow{-3}{*}{37,5} &  \\ \cline{1-4}
+\cellcolor[HTML]{EFEFEF} & 30 & 114 &  &  \\ \cline{2-3}
+\cellcolor[HTML]{EFEFEF} & 37 & 140 &  &  \\ \cline{2-3}
+\multirow{-3}{*}{\cellcolor[HTML]{EFEFEF}\textbf{FR5}} & 45 & 170 & \multirow{-3}{*}{66} &  \\ \cline{1-4}
+\cellcolor[HTML]{EFEFEF} & 55 & 211 &  &  \\ \cline{2-3}
+\multirow{-2}{*}{\cellcolor[HTML]{EFEFEF}\textbf{FR6}} & 75 & 261 & \multirow{-2}{*}{108} &  \\ \cline{1-4}
+\end{tabular}
+\caption{My caption}
+\label{Az N700A termékcsalád jelenleg fejlesztés alatt álló elemei}
+\end{table}
+
+\todo{Azért ezt a mondatot még ki kéne találni úgy rendesen}
+
+
 
 \section{Az eszköz felépítése}
 
