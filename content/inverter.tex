@@ -35,7 +35,7 @@ Ezek a modern eszközök már tartalmaznak mozgó alakrészt (feltéve persze, h
 
 \section{Termék specifikáció}
 
-A Hyundai által jelenleg fejlesztett frekvenciaváltó család kis feszültségű, általános célú PWM vezérlet IGBT kapcsolóelemű 2 szintű inverteres frekvenciaváltó, passzív front-end-el, azaz a hálózatra nem tud visszatáplálni.
+A Hyundai által jelenleg fejlesztett frekvenciaváltó család kis feszültségű, általános célú PWM vezérlet IGBT kapcsolóelemű 2 szintű inverteres frekvenciaváltó, passzív front-end-el, azaz a hálózatra nem tud visszatáplálni. \Aref{fig:family} táblázatban látható a jelenleg fejlesztett termékcsalád.
 
 \begin{table}[]
 \centering
@@ -60,14 +60,41 @@ A Hyundai által jelenleg fejlesztett frekvenciaváltó család kis feszültség
 \multirow{2}{*}{\textbf{FR6}} & 55 & 211 & \multirow{2}{*}{108} &  \\ \cline{2-3}
  & 75 & 261 &  &  \\ \cline{1-4}
 \end{tabular}
-\caption{My caption}
-\label{my-label}
+\caption{A fejlesztés alatt álló termékpaletta}
+\label{fig:family}
 \end{table}
-\todo{Azért ezt a mondatot még ki kéne találni úgy rendesen}
 
+Azt, hogy a termék milyen széles területét lefedi az iparnak, jól jellemzi, hogy az ezt leíró dokmentum 52 különböző tételt különböztet meg. A teljesség igénye nélkül a felvevő piac néhány szelete:
 
+\begin{itemize}
+	\item{Nagyfeszültségű légkondícionálók}
+	\item{Élelmiszeripar}
+	\item{Textilipar}
+	\item{Szállítószalagok}
+	\item{Csomagolás és cimkézés}
+	\item{Nyomtatás}
+	\item{Gépi megmunkálás}
+	\item{Autóipar}
+\end{itemize}
+
+A hardveres funkcionalitás nagyjából megegyezeik minden esetben, az igazán nagy különbség az egyes területek között a szoftver funkcionalitásában van. Egy szállítószalag esetében fontos a pontos fordulatszám tartása, vagy a pontos pozíció beállítása, míg más felhsználás esetében a potos nyomatékszabályozás lehet fontos, ilyen lehet pl. a villamos vontatás.
+
+Amennyiben külön nincsen jelölve, a dolgozat a továbbiakban az FR1 kódjelű, legkisebb frekvenciaváltóra hivatkozik a példák esetében.
 
 \section{Az eszköz felépítése}
+
+\paragraph{}
+A frekvenciaváltó egyenirányítja a bejövő hálózati feszültséget, egy köztes energiatárolóban, az ún. \emph{DC-link} kondenzátorban tárol némi energiát, hogy a feszültség lengésést alacsonyan tartsa, majd egy kimeneti inverterrel előállítja a szükséges jelalakot. Ezt a vázlatot láthatjuk \aref{fig:vfd_schema} ábrán, kiemelve a hálózatot modellező ellenállást és induktivitást.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = \textwidth]{figures/VFDschematic_choke.png}
+	\caption{A frekvenciaváltó egyszerű felépítése} 
+	\label{fig:vfd_schema}
+\end{figure}
+
+Itt természetesen csak egy vázlatos ábrázolás látató, ezen nem szerepelnek a megható elektronikák, a vezérlés, a mérések, és még sok más. Jól látható azonban, hogy a folyamatra egyedül a félhidak vezérlésével tudunk hatni. A Frame 1-ben a kimeneti IGBT-k és diódák egy tokban vannak, egy modulban. 
+
 
 
 
