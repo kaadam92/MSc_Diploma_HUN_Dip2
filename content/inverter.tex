@@ -89,14 +89,32 @@ A frekvenciaváltó egyenirányítja a bejövő hálózati feszültséget, egy k
 	\label{fig:vfd_schema}
 \end{figure}
 
-Itt természetesen csak egy vázlatos ábrázolás látató, ezen nem szerepelnek a megható elektronikák, a vezérlés, a mérések, és még sok más. Jól látható azonban, hogy a folyamatra egyedül a félhidak vezérlésével tudunk hatni. A Frame 1-ben a kimeneti IGBT-k és diódák egy tokban vannak, egy modulban. 
-
+Itt természetesen csak egy vázlatos ábrázolás látató, ezen nem szerepelnek a megható elektronikák, a vezérlés, a mérések, és még sok más. Jól látható azonban, hogy a folyamatra egyedül a félhidak vezérlésével tudunk hatni. A Frame 1-ben a kimeneti IGBT-k és diódák egy tokban vannak, egy Semikron SKiiP 24NAB12T4V1 modulban.
 
 \section{A szükséges kompetenciák}
 
-A felépítés alapján elmondható, hogy egy iylen termék összeállítása nagyon bonyolult feladat, sok területet lefed, sok féle kompetenciára van szükség.
+A felépítés alapján elmondható, hogy egy iylen termék összeállítása nagyon bonyolult feladat, sok területet lefed, sok féle kompetenciára van szükség. A teljesítményelektronikai elemek és kapcsolálos megtervezése gyakorlatilag csak az első gondolat. Ezen túl szükséges még a termikus méretezés, a vezérlő elektronikák tervezése, a különböző mérések megvalósítása. Amikor már ezzel is készen vagyunk, akkor a frekvenciaváltó tervezése elektronikai szempontból késznek mondható. Nem sabad megfeledkezni azonban arról, hogy ez egy készülék, melynek a mechnaikus felépítéséről is gondoskodni kell. Itt kerülnek képbe a konstrukcióval foglalkozó gépész kollégák.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = \textwidth]{figures/n700_proto.jpg}
+	\caption{A frekvenciaváltó egyszerű felépítése} 
+	\label{fig:n700_proto}
+\end{figure}
+
+A feladat már eddig is kellőképpen összett volt, de a termékünk még mindig nem működik. Hiányzik belőlea szoftver, mely önmagában nagyon szerteágazó munka. Először is elő kell állítani a megfelelő szabályzókat, melyek segítsgével elő tudunk állítani színuszos kimenetet, gondoskodni kell a kapcsolóelemek megfelelő modulációjáról. Foglalkozni kell a magasabb szintű funkcionalitás megvalósításával, a különböző kommunikációs vonalak kezelésével, magának a rendszernek a menedzselésével. A HMI\footnote{Human-Machine Interface}-n is meg kell jelenteni információt, biztosíani kell lehetőséget a beavatkozásra. Amennyiben úgy gondolá az olvasó, hogy ez még nem annyira bonyolult, akkor figyelmébe ajánlom a PC-s szoftvert, melyet szintén el kell készíteni, ha egy jól használható terméket kívánunk előálltani.
+
 \todo[inline]{Félbehagyott gondolat}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = \textwidth]{figures/architect.png}
+	\caption{A frekvenciaváltó egyszerű felépítése} 
+	\label{fig:hw_architect}
+\end{figure}
+
+\Afigref{hw_architect} ábrán látható a különböző elemek kapcoslata, illetve a kommunikávó közöttük.
 
 \section{A fejlesztés folyamata}
 
-A teljesítményelektronikai eszközök fejlesztésének a nehézésége abban rejlik, hogy a kisebb teljesítményű modell nem feltéltlenül viselkedik úgy, mint nagyáramú társa
+A teljesítményelektronikai eszközök fejlesztésének a nehézésége abban rejlik, hogy a kisebb teljesítményű modell nem feltéltlenül viselkedik úgy, mint nagyáramú társa. A fenti felíráson az is jól látszik, hogy bizonyos folyamatok párhuzamosíthatóak. A szoftverfejlesztés elkezdődhet a nagyáramú elektornika tervezésésvel együtt, illetve a vezérlő elektronikák is tervezhetően a kezdeti specifiákciók, illetve a a kapcsolódási pontok definiálása után. A fejlődő szoftver teszteléséhez aszonban elengedhetelen, hogy a beágyazott eszköz megkapja a szükséges gerjesztéseket a külvilágtól. Amíg nem áll rendelkezésre a valós eszköz, addig ezt egy szimulátorral vagyunk kénytelenek megvalósítani. Ez a Hardware-in-the-Loop szimulátor. Az eszköz jól jön azonban amikor már a valós frekvenciaváltó is rendelkezésre áll. Az egyes szoftvermódosításokat célszerű kipróbálni ezen az eszközön először, mert egy hiba könnyedén végzetes következményekkel járhat a valós invertren.
