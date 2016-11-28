@@ -11,9 +11,9 @@ A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő 
 \subsection{Tápegység}
 A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technologies \emph{LT3845AEFE#PBF} szinkron buck tápegység vezérlő IC és a hozzá tartozó külső apparátus állítja aelő az $5 V$-os tápfeszültséget mind az FPGA mind pedig a CCB számára. A tápegység maximálisan $6 A$ terhelhetőségű, amely előser soknak tűnhet, de az FPGA fogyasztását jelentpsen befolyásolja a benne található firmware, így elképzelhető az kapacitás teljes felhasználása is, kis teljesítmény esetén edig hatékony tud maradni az ún. \emph{Burst mode} működési mód segítségével.
 
-\subsecton{Szigma-Delta átalakítók}
+\subsecton{Szigma-Delta (\Sigma\Delta) átalakítók}
 
-Az FPGA nem rendelkezik analóg kiementekkl, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. 
+Az FPGA nem rendelkezik analóg kiementekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. 
 
 \subsection{ZTEX kártya}
 
