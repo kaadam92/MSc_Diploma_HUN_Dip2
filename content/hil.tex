@@ -1,7 +1,5 @@
 \chapter{HIL felépítése}
 
-\todo
-
 \section{Hardware felépítése}
 
 A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystemb blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása. Mivel a szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja.
@@ -11,7 +9,7 @@ A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő 
 \subsection{Tápegység}
 A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technologies \emph{LT3845AEFE#PBF} szinkron buck tápegység vezérlő IC és a hozzá tartozó külső apparátus állítja aelő az $5 V$-os tápfeszültséget mind az FPGA mind pedig a CCB számára. A tápegység maximálisan $6 A$ terhelhetőségű, amely előser soknak tűnhet, de az FPGA fogyasztását jelentpsen befolyásolja a benne található firmware, így elképzelhető az kapacitás teljes felhasználása is, kis teljesítmény esetén edig hatékony tud maradni az ún. \emph{Burst mode} működési mód segítségével.
 
-\subsecton{Szigma-Delta átalakítók}
+\subsection{Szigma-Delta átalakítók}
 
 Az FPGA nem rendelkezik analóg kiementekkl, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. 
 
@@ -21,7 +19,7 @@ Egy iylen teszt és fejlesztési eszköz fejlesztése során az egiyk legfontosa
 
 \begin{figure}[!ht]
 	\centering
-	\includegraphics{figures/fpga216.jpg}
+	\includegraphics[width = 0.6\textwidth]{figures/fpga216.jpg}
 	\caption{A ZTEX 2.16 FPGA board} 
 	\label{fig:ztex}
 \end{figure}
@@ -31,7 +29,7 @@ Egy iylen teszt és fejlesztési eszköz fejlesztése során az egiyk legfontosa
 
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width = \textwidth]{figures/fpga216blox.png}
+	\includegraphics[width = \textwidth]{figures/usb-fpga-2.16.png}
 	\caption{A ZTEX 2.16 FPGA board felépítése} 
 	\label{fig:ztex_block}
 \end{figure}
@@ -51,10 +49,11 @@ Blokk RAM/FIFO (36 kb/darab) & 365    \\
 Blokk RAM összesen (kb)      & 13140  \\
                              &        \\
                              &        \\
-                             & 
-\caption{A Xilinx Artix 7 XC7A200T}
-\label{artix7spec}      
+                             &        \\
+     
 \end{tabular}
+\caption{A Xilinx Artix 7 XC7A200T}
+\label{artix7spec} 
 \end{table}
 
 
