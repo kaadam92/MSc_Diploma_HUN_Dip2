@@ -2,6 +2,8 @@
 %\documentclass[11pt,a4paper,twoside,openright]{report}  % Duplex
 
 \input{include/packages}
+\usepackage{biblatex}
+\addbibresource{bib/mybib.bib}
 
 %TODO Set the main variables
 \newcommand{\vikszerzoVezeteknev}{Kiss}
@@ -92,6 +94,7 @@
 % Bibliography
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \bibliography{bib/mybib}
+\printbibliography
 \addcontentsline{toc}{chapter}{\irodalomjegyzek}
 
 % Appendix
