@@ -1,7 +1,5 @@
 \chapter{HIL felépítése}
 
-\todo
-
 \section{Hardware felépítése}
 
 A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystemb blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása. Mivel a szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja.
@@ -13,7 +11,7 @@ A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technolo
 
 \subsection{ZTEX kártya}
 
-Egy iylen teszt és fejlesztési eszköz fejlesztése során az egiyk legfontosabb szempont a modularitás. Nem láthatjuk előre feltétlenül, hogy a későbbiekben mire lesz szükség. Az FPGA önmagában biztosít modularitást, hiszen cserélhető benne a hardware, jelen esetben a megvalósított matematikai modell. Ezen felül egy közel 500 lábbal rendelkező BGA tokos FPGA-hoz a nyáktervezés sem triviális feladat. A megfelelő lábak kivezetéséhez legalább 6-8 rétegre van szükség, és nagyon sok hibalehetőséget tartogat magában. Ezek miatt egy FPGA modul alkalmazása mellett döntöttünk. Bár az elérhető GPIO lábak mennyisége így korlátoztt, az FPGA-t működtető áramkör garantáltan működőképes, illetve a saját tervezésű elektornika bonyolultsága is jelentősen csökken.
+Egy iylen teszt és fejlesztési eszköz fejlesztése során az egyik legfontosabb szempont a modularitás. Nem láthatjuk előre feltétlenül, hogy a későbbiekben mire lesz szükség. Az FPGA önmagában biztosít modularitást, hiszen cserélhető benne a hardware, jelen esetben a megvalósított matematikai modell. Ezen felül egy közel 500 lábbal rendelkező BGA tokos FPGA-hoz a nyáktervezés sem triviális feladat. A megfelelő lábak kivezetéséhez legalább 6-8 rétegre van szükség, és nagyon sok hibalehetőséget tartogat magában. Ezek miatt egy FPGA modul alkalmazása mellett döntöttünk. Bár az elérhető GPIO lábak mennyisége így korlátoztt, az FPGA-t működtető áramkör garantáltan működőképes, illetve a saját tervezésű elektornika bonyolultsága is jelentősen csökken.
 
 \begin{figure}[!ht]
 	\centering
@@ -80,7 +78,7 @@ Az így kapott jelet már az FPGA lábára vezethetjük.
 	\label{fig:lowpass}
 \end{figure}
 
-\Aref{fig:lowpass} ábrán látható aluláteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatalkozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós enelktronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez nem jelentős, így a mérés negatív jelét földre kötjük.
+\Aref{fig:lowpass} ábrán látható aluláteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatalkozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós enelktronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez a zavar nem jelentős, így a mérés negatív jelét földre kötjük.
 
 
 
@@ -88,12 +86,59 @@ Az így kapott jelet már az FPGA lábára vezethetjük.
 
 A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossaág volt a modellnek, hogy a DC link feszültésge egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatásást nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
 
+\subsection{A rendelkezésre álló modell}
+
+\subsection{Az implementál bemeneti modell}
+
 \begin{figure}[]
 	\centering
 	\includegraphics[width = \textwidth]{figures/model_continous.pdf}
 	\caption{A frekvenciaváltó bemenetének folytonos modellje} 
 	\label{fig:cont_input_model}
 \end{figure}
+
+A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blokkal ami a felsorolt hiányosságokat orvosolja. Az elkészítendő modellnek tartalmaznia kell tehát egy háromfázisú hálózatmodellt, a diódás hidat, a bemeneti DC folytót, illetve a DC link kondenzátort. A modellezendő főáramkori részt \aref{fig:input_marked} ábrán jelöltem. 
+
+\begin{figure}[H!]
+	\centering
+	\includegraphics[width = \textwidth]{figures/VFDschematic_choke_marked.png}
+	\caption{A frekvenciaváltó bemenetének folytonos modellje} 
+	\label{fig:input_marked}
+\end{figure}
+
+A számítások megkönnyításe érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni.
+
+
+\begin{equation}
+
+\begin{bmatrix}
+       U_a\\[0.3em]
+       U_b\\[0.3em]
+       U_c          
+\end{bmatrix}
+=
+\begin{bmatrix}
+       1 & 0      \\[0.3em]
+       -\frac{1}{2} & \frac{sqrt{3}}{2}       \\[0.3em]
+       -\frac{1}{2} & -\frac{sqrt{3}}{2}
+\end{bmatrix}
+\begin{bmatrix}
+       U_x\\[0.3em]
+       U_y         
+\end{bmatrix}
+
+
+\end{equation}
+
+\begin{figure}[H!]
+	\centering
+	\includegraphics[width = \textwidth]{figures/continous_testrun_1.png}
+	\caption{A folytonos modell szimulációja} 
+	\label{fig:cont_run}
+\end{figure}
+
+
+
 
 \section{A szimulátor szerepe a folyamatban}
 \section{A szimulátor felépítése}
