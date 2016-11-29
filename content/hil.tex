@@ -80,13 +80,13 @@ Az így kapott jelet már az FPGA lábára vezethetjük.
 
 \Aref{fig:lowpass} ábrán látható aluláteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatalkozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós enelktronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez a zavar nem jelentős, így a mérés negatív jelét földre kötjük.
 
-
-
 \section{Simulink modell}
 
 A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossaág volt a modellnek, hogy a DC link feszültésge egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatásást nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
 
 \subsection{A rendelkezésre álló modell}
+
+
 
 \subsection{Az implementált bemeneti modell}
 
@@ -106,7 +106,29 @@ A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blok
 	\label{fig:input_marked}
 \end{figure}
 
-A számítások megkönnyítése érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni.
+A számítások megkönnyítése érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni. Erre azért van lehetőség, mert a három mennyiség által reprezentált információt lehetséges csupán két jellel ábrázolni. A háromfázisú mennyiségekből az alábbi összefüggés segítségével az x és y összetevőket, amennyiben feltételezzük, hogy a hálózat szimmetrikus. 
+
+\begin{equation}
+$$
+\centering
+\begin{bmatrix}
+       U_x\\[0.3em]
+       U_y 
+\end{bmatrix}
+=
+\begin{bmatrix}
+       1 & 0 & 0     \\[0.3em]
+       \frac{1}{\sqrt{3}} & \frac{2}{\sqrt{3}} & 0     
+\end{bmatrix}
+\begin{bmatrix}
+       U_a\\[0.3em]
+       U_b\\[0.3em]
+       U_c    
+\end{bmatrix}
+$$
+\end{equation}
+
+Ezek után a hálózatparamétereket csak két ''fázison,, kell figyelembe venni.  
 
 
 \begin{equation}
@@ -130,25 +152,6 @@ $$
 $$    
 \end{equation}
 
-\begin{equation}
-$$
-\centering
-\begin{bmatrix}
-       U_x\\[0.3em]
-       U_y 
-\end{bmatrix}
-=
-\begin{bmatrix}
-       1 & 0 & 0     \\[0.3em]
-       \frac{1}{\sqrt{3}} & \frac{2}{\sqrt{3}} & 0     
-\end{bmatrix}
-\begin{bmatrix}
-       U_a\\[0.3em]
-       U_b\\[0.3em]
-       U_c    
-\end{bmatrix}
-$$
-\end{equation}
 
 \begin{equation}
     \centering
@@ -163,9 +166,45 @@ $$
 \end{figure}
 
 
+\subsection{Áttérés diszrét időre}
 
+Az eddig mevalósított hálózatmodell folytonos idejű, Laplace tartományban ábárzolt egyenletekkel. Az FPGA, mint minden digitális rendszer azonban diszkrét időben fogja ezeket megoldani. Emiatt a modellt át kell traszformálni \emph{z} tartományba. Az integrátor matematikailag az alábbi alaknak felel meg:
 
-\section{A szimulátor szerepe a folyamatban}
-\section{A szimulátor felépítése}
-\subsection{A hardware felépításe}
-\subsection{A firmware felépítése}
+\begin{equation}
+\centering
+\frac{1}{s} \Rightarrow \frac{1}{1-z^{-1}}
+\end{equation}
+
+Ez az átalakítás a modellben grafikusan pedig az alábbi módon jelentkezik:
+
+\begin{figure}[H!]
+	\centering
+	\includegraphics[width = \textwidth]{figures/integrator.png}
+	\caption{Az integrázor diszkrét idejű megvalósítása} 
+	\label{fig:integrator}
+\end{figure}
+
+Tehát az összes integrátor blokkon el kell végezni a fenti átalakítást.
+
+\todo[inline]{Itt még ki kéne egészíteni z tartomány beli rizsával}
+
+\subsection{Fixpontos ábárzolás}
+
+Az FPGA-ban hatékonyan csak fixpontos aritmetika valósítható meg, így a most lebegőpontos változóinkat át kell alakítanunk fixpontosra. Ez könnyen megoldható, hiszen az egyes változók értéktartománya előre ismert, pl tudjuk, hogy a DC feszültség biztosan kisebb, mint $U_{DC}=1000\ V$.
+
+A lebegépontos számábárolás megkülönböztet egyszeres (floating) és kétszeres (double) precizitást. Előbbi a számot 32 utóbbi pedig 64 biten tárolja.
+
+\begin{figure}[H!]
+	\centering
+	\includegraphics[width = \textwidth]{figures/floating.jpg}
+	\caption{A lebegőpontos számábrázolás} 
+	\label{fig:floating}
+\end{figure}
+
+Ilyen módon a floating körülbelül 7, a double pedig 17 tizedesjegy pontosságot enged meg. Mindkét ábrázolásmód 1 darab előjel bitet után mantissza és exponens formájában tárolja a számot. A mantissza normál alakban, a kettedespont mögötti biteket tárolja. A normálak biztosítja, hogy a kettedespont előtt már csak garantáltan 1 darab 1-es van, így ez elhagyható. Az exponens pedig egy a kettedespont helyét tárolja úgy, hogy a valós kitevő 127-el csökkentve van.
+
+A fixpontos ábrázolás ezzel szemben rögzíti a tizedespont helyét, valamint azt nem kódolja a változóban, hanem a típusa határozza meg az értelmezés módját.
+
+\todo[inline]{Írni kell még a fixpontos dolgokról}
+
+A Simulink alapbeállításként double változóként hozza létre a jeleket és dolgozik velük. 
