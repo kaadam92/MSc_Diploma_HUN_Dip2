@@ -88,7 +88,7 @@ A futtatandó modell magában foglalja a teljesítményelektronikai elemek model
 
 \subsection{A rendelkezésre álló modell}
 
-\subsection{Az implementál bemeneti modell}
+\subsection{Az implementált bemeneti modell}
 
 \begin{figure}[]
 	\centering
@@ -106,11 +106,12 @@ A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blok
 	\label{fig:input_marked}
 \end{figure}
 
-A számítások megkönnyításe érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni.
+A számítások megkönnyítése érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni.
 
 
 \begin{equation}
-
+$$
+\centering
 \begin{bmatrix}
        U_a\\[0.3em]
        U_b\\[0.3em]
@@ -119,15 +120,39 @@ A számítások megkönnyításe érdekében célszerű a háromfázisú hálóz
 =
 \begin{bmatrix}
        1 & 0      \\[0.3em]
-       -\frac{1}{2} & \frac{sqrt{3}}{2}       \\[0.3em]
-       -\frac{1}{2} & -\frac{sqrt{3}}{2}
+       -\frac{1}{2} & \frac{\sqrt{3}}{2}       \\[0.3em]
+       -\frac{1}{2} & -\frac{\sqrt{3}}{2}
 \end{bmatrix}
 \begin{bmatrix}
        U_x\\[0.3em]
        U_y         
 \end{bmatrix}
+$$    
+\end{equation}
 
+\begin{equation}
+$$
+\centering
+\begin{bmatrix}
+       U_x\\[0.3em]
+       U_y 
+\end{bmatrix}
+=
+\begin{bmatrix}
+       1 & 0 & 0     \\[0.3em]
+       \frac{1}{\sqrt{3}} & \frac{2}{\sqrt{3}} & 0     
+\end{bmatrix}
+\begin{bmatrix}
+       U_a\\[0.3em]
+       U_b\\[0.3em]
+       U_c    
+\end{bmatrix}
+$$
+\end{equation}
 
+\begin{equation}
+    \centering
+    U_a+U_b+U_c = 0
 \end{equation}
 
 \begin{figure}[H!]
