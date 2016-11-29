@@ -11,10 +11,6 @@ A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő 
 \subsection{Tápegység}
 A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technologies \emph{LT3845AEFE#PBF} szinkron buck tápegység vezérlő IC és a hozzá tartozó külső apparátus állítja aelő az $5 V$-os tápfeszültséget mind az FPGA mind pedig a CCB számára. A tápegység maximálisan $6 A$ terhelhetőségű, amely előser soknak tűnhet, de az FPGA fogyasztását jelentpsen befolyásolja a benne található firmware, így elképzelhető az kapacitás teljes felhasználása is, kis teljesítmény esetén edig hatékony tud maradni az ún. \emph{Burst mode} működési mód segítségével.
 
-\subsection{Szigma-Delta (\Sigma\Delta)\ átalakítók}
-
-Az FPGA nem rendelkezik analóg kiementekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. A szigma delta átalakító nagyon nagy vonalakban egy órajel és egy fix impulzusszélességű négyszögjel, mely vagy logikai egy értéket, vagy logikai nulla értéket vesz fel az órajel minden felfutó (vagy lefutó) élére. Az így kialakult impulzusjel kitöltési tényezője egy hosszabb mintavételi ablakot tekintve arányos a bemeneti kódszóval. Ezek után a jelet egy az órajelnél sokkal kisebb vágási frekvenciájú aluláteresztő szűrűvel feldolgozva analóg jelet kapunk.\cite{artofelectronics}
-
 \subsection{ZTEX kártya}
 
 Egy iylen teszt és fejlesztési eszköz fejlesztése során az egiyk legfontosabb szempont a modularitás. Nem láthatjuk előre feltétlenül, hogy a későbbiekben mire lesz szükség. Az FPGA önmagában biztosít modularitást, hiszen cserélhető benne a hardware, jelen esetben a megvalósított matematikai modell. Ezen felül egy közel 500 lábbal rendelkező BGA tokos FPGA-hoz a nyáktervezés sem triviális feladat. A megfelelő lábak kivezetéséhez legalább 6-8 rétegre van szükség, és nagyon sok hibalehetőséget tartogat magában. Ezek miatt egy FPGA modul alkalmazása mellett döntöttünk. Bár az elérhető GPIO lábak mennyisége így korlátoztt, az FPGA-t működtető áramkör garantáltan működőképes, illetve a saját tervezésű elektornika bonyolultsága is jelentősen csökken.
@@ -58,7 +54,46 @@ Blokk RAM összesen (kb)      & 13140  \\
 \label{artix7spec}    
 \end{table}
 
+Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardwarenek, a későbbi bővülésre is hagy lehetőséget
 
+\subsection{Szigma-Delta (\Sigma\Delta)\ átalakítók}
+
+Az FPGA nem rendelkezik analóg kiementekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. A szigma delta átalakító nagyon nagy vonalakban egy órajel és egy fix impulzusszélességű négyszögjel, mely vagy logikai egy értéket, vagy logikai nulla értéket vesz fel az órajel minden felfutó (vagy lefutó) élére. Az így kialakult impulzusjel kitöltési tényezője egy hosszabb mintavételi ablakot tekintve arányos a bemeneti kódszóval. Ezek után a jelet egy az órajelnél sokkal kisebb vágási frekvenciájú aluláteresztő szűrűvel feldolgozva analóg jelet kapunk. A szigma delta átalakító további előnye a PWM kimenethez képest, hogy a kvantálái zajt nagyfrekvenciás tartományba tolja.\cite{artofelectronics}
+
+Igen félrevezető névvel szokás "1 bites DA" átalakítónak is nevezni. A kifejezés egyszerűséget és alacsony teljesítményt sugall, ennek ellenére a megoldás rendkívül lineáris és nagy felbontású eredményt ad, így elterjedten használják pl. audio eszközökben is.
+
+A mi esetünkben két részre bontható az átalakító. A modellben fut egy analógjelből digitális jelet létrehozó szigma-delta átalakító, majd az így kiadott digitális jelet szűrjük már az FPGA-n kívül egy aluláteresztő szűrűvel. \Aref{fig:sigmadelta} ábra szemlélteti az átalakító működését. A bejövő analalóg jelből levonjuk a hibajelet, majd egy komparátor összehasonlítja egy referenciával. Amennyiben nagyobb a bejövő jel, a kimenet logikai "1" értéket vesz fel, ha kisebb, logikai "0"-t. Ezt a jelet, egy 1-bites DAC-on keresztül vezetve akkumuláljuk, így kialakítva a hibajelet. 
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width = 0.75\textwidth]{figures/sigmadelta.png}
+	\caption{A szigma-delta átalakító} 
+	\label{fig:sigmadelta}
+\end{figure}
+
+Az így kapott jelet már az FPGA lábára vezethetjük.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width = \textwidth]{figures/lowpassfilter.png}
+	\caption{A négyszögjelet fogadó aluláteresztő szűrő} 
+	\label{fig:lowpass}
+\end{figure}
+
+\Aref{fig:lowpass} ábrán látható aluláteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatalkozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós enelktronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez nem jelentős, így a mérés negatív jelét földre kötjük.
+
+
+
+\section{Simulink modell}
+
+A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossaág volt a modellnek, hogy a DC link feszültésge egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatásást nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
+
+\begin{figure}[]
+	\centering
+	\includegraphics[width = \pagewidth]{figures/model_continous.pdf}
+	\caption{A frekvenciaváltó bemenetének folytonos modellje} 
+	\label{fig:cont_input_model}
+\end{figure}
 
 \section{A szimulátor szerepe a folyamatban}
 \section{A szimulátor felépítése}
