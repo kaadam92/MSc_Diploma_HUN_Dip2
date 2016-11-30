@@ -62,16 +62,16 @@ Igen félrevezető névvel szokás "1 bites DA" átalakítónak is nevezni. A ki
 
 A mi esetünkben két részre bontható az átalakító. A modellben fut egy analógjelből digitális jelet létrehozó szigma-delta átalakító, majd az így kiadott digitális jelet szűrjük már az FPGA-n kívül egy aluláteresztő szűrűvel. \Aref{fig:sigmadelta} ábra szemlélteti az átalakító működését. A bejövő analalóg jelből levonjuk a hibajelet, majd egy komparátor összehasonlítja egy referenciával. Amennyiben nagyobb a bejövő jel, a kimenet logikai "1" értéket vesz fel, ha kisebb, logikai "0"-t. Ezt a jelet, egy 1-bites DAC-on keresztül vezetve akkumuláljuk, így kialakítva a hibajelet. 
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width = 0.75\textwidth]{figures/sigmadelta.png}
 	\caption{A szigma-delta átalakító} 
 	\label{fig:sigmadelta}
 \end{figure}
 
-Az így kapott jelet már az FPGA lábára vezethetjük.
+Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet. Az FPGA 
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width = \textwidth]{figures/lowpassfilter.png}
 	\caption{A négyszögjelet fogadó aluláteresztő szűrő} 
@@ -106,7 +106,7 @@ A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blok
 	\label{fig:input_marked}
 \end{figure}
 
-A számítások megkönnyítése érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni. Erre azért van lehetőség, mert a három mennyiség által reprezentált információt lehetséges csupán két jellel ábrázolni. A háromfázisú mennyiségekből az alábbi összefüggés segítségével az x és y összetevőket, amennyiben feltételezzük, hogy a hálózat szimmetrikus. 
+A számítások megkönnyítése érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni. Erre azért van lehetőség, mert a három mennyiség által reprezentált információt lehetséges csupán két jellel ábrázolni. A háromfázisú mennyiségekből az alábbi összefüggés segítségével az x és y összetevőket.
 
 \begin{equation}
 $$
