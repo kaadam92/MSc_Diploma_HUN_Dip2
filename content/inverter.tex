@@ -109,11 +109,11 @@ A feladat már eddig is kellőképpen összett volt, de a termékünk még mindi
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = \textwidth]{figures/architect.png}
-	\caption{A frekvenciaváltó egyszerű felépítése} 
+	\caption{A vezérlő elektronika blokkvázlata} 
 	\label{fig:hw_architect}
 \end{figure}
 
-\Afigref{hw_architect} ábrán látható a különböző elemek kapcoslata, illetve a kommunikávó közöttük.
+\Afigref{hw_architect} ábrán látható a különböző elemek kapcoslata, illetve a kommunikávó közöttük. A CCB feladat a teljesítményátalakítás közvetlen irányítása. Ez a kártya végzi az analóg méréseket, és ezen mérések, illetve a beérkező alapjel alapján előállítja az IGBT-ket vezérlő PWM jeleket. A szoftveres védelmekről is ez a szint gondoskodik. A következő az MCB, mely az egyel magasabb szintű vezérlésért felel. Ez jelenti a kommunikációt más eszközökkel, a különböző terepi buszukon, etherneten, vagy RS-485-ön. Rendelkezik továbbá általános célú digitális és analóg be és kimenetekkel, melyek működése felhasználói igények szerint testre szabható. Ez az eszkösz felelős a számítógépes konfiguráló szoftverrel való kommunikációért, valamint a HMI vezérléséért is. A fejlesztett HIL szimulátor szempontjából ez a három elektronika bír szereppel, ezek közül a HMI csak közvetetten, mivel az MCB-n keresztül kapcsolódik a rendszerhez.
 
 \section{A fejlesztés folyamata}
 

@@ -1,8 +1,70 @@
 \chapter{HIL felépítése}
 
+Nyilvánvaló tehát, hogy napjainkban, a modern teljesítményelektornikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítményelektornikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen jahívtható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépításe nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül.\cite{sutozoli}
+
 \section{Hardware felépítése}
 
-A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystemb blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása. Mivel a szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja.
+A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystem blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása. Mivel a szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja.
+
+A CCB-vel való kommunikáció az alábbi jelek segítségével valósul meg:
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Név}   & \textbf{I/O} & \textbf{A/D} & \textbf{Leírás}                 \\ \hline
+UoutU          & Digital      & Bemenet      & Az U fázis nullátmenetének jele \\ \hline
+UoutV          & Digital      & Bemenet      & A V fázis nullátmenetének jele  \\ \hline
+UoutW          & Digital      & Bemenet      & A W fázis nullátmenetének jele  \\ \hline
+Sto1SatusX     & Digital      & Bemenet      &                                 \\ \hline
+Sto2SatusX     & Digital      & Bemenet      &                                 \\ \hline
+MCB\_TxD       & Digital      & Kimenet      &                                 \\ \hline
+MCB\_RxD       & Digital      & Bemenet      &                                 \\ \hline
+EEPROM\_SDA    & Digital      & Be/Kimenet   &                                 \\ \hline
+EEPAROM\_SCL   & Digital      & Kimenet      &                                 \\ \hline
+RectStatusC    & Digital      & Bemenet      &                                 \\ \hline
+PrechargeCtrlX & Digital      &              &                                 \\ \hline
+IgbtBFltX      & Digital      &              &                                 \\ \hline
+IgbtBRdy       & Digital      &              &                                 \\ \hline
+IgbtBRstX      & Digital      &              &                                 \\ \hline
+IgbtPsuCtrlX   & Digital      &              &                                 \\ \hline
+IgbtInvFltX    & Digital      &              &                                 \\ \hline
+IgbtInvRdy     & Digital      &              &                                 \\ \hline
+IgbtInvRstX    & Digital      & Kimenet      &                                 \\ \hline
+IgbtU1         & Digital      & Kimenet      &                                 \\ \hline
+IgbtU2         & Digital      & Kimenet      &                                 \\ \hline
+IgbtV1         & Digital      & Kimenet      &                                 \\ \hline
+IgbtV2         & Digital      & Kimenet      &                                 \\ \hline
+IgbtW1         & Digital      & Kimenet      &                                 \\ \hline
+IgbtW2         & Digital      & Kimenet      &                                 \\ \hline
+IgbtB          & Digital      & Kimenet      &                                 \\ \hline
+FanPsuCtrC     & Digital      & Kimenet      &                                 \\ \hline
+FanExtCtrC     & Digital      & Kimenet      &                                 \\ \hline
+FanIntCtrC     & Digital      & Kimenet      &                                 \\ \hline
+FanExtSpeedC1  & Digital      & Kimenet      &                                 \\ \hline
+FanExtSpeedC2  & Digital      & Kimenet      &                                 \\ \hline
+5V\_Loopback   & Power        &              &                                 \\ \hline
+TIgbtW         & Analog       & Bemenet      &                                 \\ \hline
+15VCM          & Analog       & Bemenet      &                                 \\ \hline
+TIgbtV         & Analog       & Bemenet      &                                 \\ \hline
+UdcMN          & Analog       & Bemenet      &                                 \\ \hline
+UdcMP          & Analog       & Bemenet      &                                 \\ \hline
+IWN            & Analog       & Bemenet      &                                 \\ \hline
+IWP            & Analog       & Bemenet      &                                 \\ \hline
+TIgbtU         & Analog       & Bemenet      &                                 \\ \hline
+TIgbtB         & Analog       & Bemenet      &                                 \\ \hline
+IUP            & Analog       & Bemenet      &                                 \\ \hline
+IUN            & Analog       & Bemenet      &                                 \\ \hline
+IVP            & Analog       & Bemenet      &                                 \\ \hline
+IVN            & Analog       & Bemenet      &                                 \\ \hline
+TA             & Analog       & Bemenet      &                                 \\ \hline
+5VSto1         & Analog       & Bemenet      &                                 \\ \hline
+5VSto2         & Analog       & Bemenet      &                                 \\ \hline
+UdcP           & Analog       & Bemenet      &                                 \\ \hline
+UdcN           & Analog       & Bemenet      &                                 \\ \hline
+\end{tabular}
+\caption{A CCB jelei}
+\label{ccbsignals}
+\end{table}
 
 \todo[inline]{Blokkvázlat a HIL-ről}
 
