@@ -314,7 +314,22 @@ A lebegépontos számábárolás megkülönböztet egyszeres (floating) és két
 
 Ilyen módon a floating körülbelül 7, a double pedig 17 tizedesjegy pontosságot enged meg. Mindkét ábrázolásmód 1 darab előjel bitet után mantissza és exponens formájában tárolja a számot. A mantissza normál alakban, a kettedespont mögötti biteket tárolja. A normálak biztosítja, hogy a kettedespont előtt már csak garantáltan 1 darab 1-es van, így ez elhagyható. Az exponens pedig egy a kettedespont helyét tárolja úgy, hogy a valós kitevő 127-el csökkentve van.
 
-A fixpontos ábrázolás ezzel szemben rögzíti a tizedespont helyét, valamint azt nem kódolja a változóban, hanem a típusa határozza meg az értelmezés módját.
+A fixpontos ábrázolás ezzel szemben rögzíti a tizedespont helyét, valamint azt nem kódolja a változóban, hanem a típusa határozza meg az értelmezés módját. A MATLAB-nak saját fixpontos formátuma van, melyet a \emph{fixdt(s,b,f)} formátummal használhatunk. Az \emph{s} jelöli, hogy az adott szám előjeles-e vagy sem, ha 1 az értéke akkor igen, ha 0, akkor nem. A következő \emph{b} a bitek számát jelöli összesen, theát itt adhatjuk meg, hogy hány biten legyen ábrázolva a szám. Ha az adott szám előjeles, akkor nem adódik hozzá a mérethez még egy bit az előjel miatt, hanem 1 bittel csökken a szám tárolására felhasnználható hely. Az utolsó \emph{f} szám jeleni a kettedesjegyek számát. Néhány példa \aref{tab:fixdt}. táblázatban látható. 
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+MATLAB típus  & tartomány               & LSB \\ \hline
+fixdt(0,32,0) & 0..4294967296           & 1   \\ \hline
+fixdt(1,32,0) & -2147483648..2147483648	& 1   \\ \hline
+fixdt(0,8,10) & 0..0,25        	   	    & 0,0009765625 \\ \hline
+fixdt(0,8,8)  & 0..1     			 	& 0,00390625    \\ \hline
+fixdt(1,8,2)  & -31..32     			& 0,25    \\ \hline
+\end{tabular}
+\caption{My caption}
+\label{tab:fixdt}
+\end{table}
 
 \todo[inline]{Írni kell még a fixpontos dolgokról}
 
