@@ -4,9 +4,12 @@ Nyilvánvaló tehát, hogy napjainkban, a modern teljesítményelektornikai eszk
 
 \section{Hardware felépítése}
 
-A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystem blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása. Mivel a szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja.
+A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystem blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása.
 
-A CCB-vel való kommunikáció az alábbi jelek segítségével valósul meg:
+\subsection{CCB és MCB csatlakozó}
+\todo[inline]{Meg kell rendesen foglalmani a kis mondandóm}
+A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART-on valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{table:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
+
 \begin{table}[]
 \centering
 \begin{tabular}{|l|l|l|l|}
@@ -65,6 +68,14 @@ UdcN           & Analog       & Bemenet      &                                 \
 \caption{A CCB jelei}
 \label{ccbsignals}
 \end{table}
+
+Ezek azok a jelek, amiket a HIL-nek vagy szimulálnia, vagy pedig fogadnia kell. Kivételt képez ez alól az \emph{5V\_Loopback}. Ennek a funkciója az, hogy létre lehet hozni a PIB-en olyan áramköri részeket, melyek az $5\ V$-os táplálást csak a CCB-n keresztül kapják meg, így nem indulnak el csatlakoztatott kártya nélkül.
+
+A digitális jelek esetében a feladat egyszerű, csak a CCB és az FPGA közti jelszint különbséget kell megoldani. Ebben egy \emph{74LVC8T245PW} típusú level-shifter lesz segítségünkra. A CCB a jelekt $5\ V$-os tartományban adja ki, illetve fogadja, az FPGA maximális kiementi feszültésge $3,3\ V$, és nem is állnak rendelkezésre nagyobb feszültséget toleráló lábak. A kisebb feszültségre való átalakításra lehetséges megoldás a feszültségosztó is, de a nagysebességű jelek dinamikájának megőrzése érdekében inkább itt is a level-shiftert választottam. A lassabb jelek esetében maradtam a feszültségosztóval való megoldásnál.
+
+Analóg jeleket tekintve csak bemenet találhat óa CCB-n. Ezen jelek előállítását Sigma-Delta átalakítók segítségével oldottam meg, melyről részletesebben később lesz szó.
+
+A fent említett jeleken kívül a HIL-en elhelyeésre került az ULINK és az St-link debuggerek csatlakozója is, a fejlesztés kényelmesebbé tételének érdekében. A CCB-re a JTAG jelei egy külön flat-flex kábel segítségével csatlakoznak. Ennek a mechanikai teherbíása igen alacsony, így pedig nem kell egy külön kártyára csatlakoztatni, kockáztatva ezzel az elmozdulást, kontakthibát vagy vezetékszakadást.
 
 \todo[inline]{Blokkvázlat a HIL-ről}
 
