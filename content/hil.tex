@@ -160,7 +160,7 @@ A futtatandó modell magában foglalja a teljesítményelektronikai elemek model
 
 \subsection{A rendelkezésre álló modell}
 
-\Aref{fig:original_model}. ábrán látható a korábban elékszített modell és az egyes blokkok kapcsolata. Jó kiniduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelőáram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kiementként, így ezt módosítani kellett, hogy a DC áram is előálljon. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az \emph{I_DC} terhelőáram, bemenetként a DC kört is tartalmazó modellemnek.
+\Aref{fig:original_model}. ábrán látható a korábban elkészített modell és az egyes blokkok kapcsolata. Jó kiniduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelőáram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kiemenetként, így ezt módosítani kellett, hogy a DC áram is előálljon. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az I_{DC} terhelőáram, bemenetként a DC kört is tartalmazó modellemnek.
 
 
 \begin{figure}[]
@@ -170,19 +170,17 @@ A futtatandó modell magában foglalja a teljesítményelektronikai elemek model
 	\label{fig:original_model}
 \end{figure}
 
-Az \emph{I_{DC}} terhelőáramot az alábbi egyenletek segítségével határozhatjuk meg:
+Az I_{DC} terhelőáramot az alábbi egyenletek segítségével határozhatjuk meg:
 
 \begin{equation}
-$$
 \centering
+$$
 I_{DC}
 =
-\left{
-\begin{array}{rc}
-I_{AC} &\mbox{ha}  & PWM_H = 1 | PWM_H = 0 \& I_{AC} < 0 \\
-0 & &
-\end{array}
-}
+\begin{cases}
+I_{AC}   & ha \  PWM_H = 1 \  | \  PWM_H = 0 \  \& \  I_{AC} < 0 \\
+0 & 
+\end{cases}
 $$    
 \end{equation}
 
