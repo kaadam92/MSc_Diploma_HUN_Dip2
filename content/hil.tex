@@ -75,7 +75,7 @@ A digitális jelek esetében a feladat egyszerű, csak a CCB és az FPGA közti 
 
 Analóg jeleket tekintve csak bemenet találhat óa CCB-n. Ezen jelek előállítását Sigma-Delta átalakítók segítségével oldottam meg, melyről részletesebben később lesz szó.
 
-A fent említett jeleken kívül a HIL-en elhelyeésre került az ULINK és az St-link debuggerek csatlakozója is, a fejlesztés kényelmesebbé tételének érdekében. A CCB-re a JTAG jelei egy külön flat-flex kábel segítségével csatlakoznak. Ennek a mechanikai teherbíása igen alacsony, így pedig nem kell egy külön kártyára csatlakoztatni, kockáztatva ezzel az elmozdulást, kontakthibát vagy vezetékszakadást.
+A fent említett jeleken kívül a HIL-en elhelyeésre került az ULINK és az St-Link debuggerek csatlakozója is, a fejlesztés kényelmesebbé tételének érdekében. A CCB-re a JTAG jelei egy külön flat-flex kábel segítségével csatlakoznak. Ennek a mechanikai teherbíása igen alacsony, így pedig nem kell egy külön kártyára csatlakoztatni, kockáztatva ezzel az elmozdulást, kontakthibát vagy vezetékszakadást.
 
 \todo[inline]{Blokkvázlat a HIL-ről}
 
@@ -93,7 +93,7 @@ Egy iylen teszt és fejlesztési eszköz fejlesztése során az egyik legfontosa
 	\label{fig:ztex}
 \end{figure}
 
-\Aref{fig:ztex} ábrán látható ZTEX panel mellett tettem le a voksom. A kártyán található egy USB-s loader, így JTAG programozó eszköz sem feltétlenül szükséges az FPGA feltöltéséshez, illetve FLASH memória is található az eszközön, így automatikusan minden indulákor betöltődik a firmware az FPGA-ba.
+\Aref{fig:ztex} ábrán látható ZTEX panel mellett tettem le a voksom. A kártyáról kivezetésre kerültek a JTAG interfész jelei is, azonban az ehhez az FPGA-hoz való Xilinx debugger nem áll rendelkezésre. A ZTEX kártyán azonban egy Cypress mikorovezérlő segítségével, \emph{libusb} driver segítségével betölthető a bitstream mind a RAM-ba, ideiglenes teszthez, mind pedig a FLASH-be, melyből az FPGA minden indítás során be tudja olvadni azt.
 
 
 \begin{figure}[!ht]
@@ -125,7 +125,8 @@ Blokk RAM összesen (kb)      & 13140  \\
 \label{artix7spec}    
 \end{table}
 
-Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardwarenek, a későbbi bővülésre is hagy lehetőséget
+Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardwarenek, a későbbi bővülésre is hagy lehetőséget. A fimware elkészítésére és fejlesztésére a Xilinx Vivado környezet biztosít lehetőséget. Ebben készült el a keretrendszer, mely a Simulinkból generált HDL fájlokat tudja fogadni, megfelelő interfészen keresztül a kártyára vezetni.
+
 
 \subsection{Szigma-Delta (\Sigma\Delta)\ átalakítók}
 
@@ -142,7 +143,7 @@ A mi esetünkben két részre bontható az átalakító. A modellben fut egy ana
 	\label{fig:sigmadelta}
 \end{figure}
 
-Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet. Az FPGA 
+Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet.
 
 \begin{figure}[!h]
 	\centering
@@ -158,6 +159,33 @@ Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az F
 A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossaág volt a modellnek, hogy a DC link feszültésge egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatásást nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
 
 \subsection{A rendelkezésre álló modell}
+
+\Aref{fig:original_model}. ábrán látható a korábban elékszített modell és az egyes blokkok kapcsolata. Jó kiniduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelőáram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kiementként, így ezt módosítani kellett, hogy a DC áram is előálljon. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az \emph{I_DC} terhelőáram, bemenetként a DC kört is tartalmazó modellemnek.
+
+
+\begin{figure}[]
+	\centering
+	\includegraphics[width = \textwidth]{figures/hil_blokkvazlat.png}
+	\caption{A SIMULINK model} 
+	\label{fig:original_model}
+\end{figure}
+
+Az \emph{I_{DC}} terhelőáramot az alábbi egyenletek segítségével határozhatjuk meg:
+
+\begin{equation}
+$$
+\centering
+I_{DC}
+=
+\left{
+\begin{array}{rc}
+I_{AC} &\mbox{ha}  & PWM_H = 1 | PWM_H = 0 \& I_{AC} < 0 \\
+0 & &
+\end{array}
+}
+$$    
+\end{equation}
+
 
 
 
@@ -203,7 +231,7 @@ $$
 $$
 \end{equation}
 
-Ezek után a hálózatparamétereket csak két ''fázison,, kell figyelembe venni.  
+Ezek után a hálózatparamétereket csak két ,,fázison'' kell figyelembe venni.  
 
 
 \begin{equation}
@@ -222,7 +250,8 @@ $$
 \end{bmatrix}
 \begin{bmatrix}
        U_x\\[0.3em]
-       U_y         
+       U_y\\[0.3em]
+       U_0,,        
 \end{bmatrix}
 $$    
 \end{equation}
