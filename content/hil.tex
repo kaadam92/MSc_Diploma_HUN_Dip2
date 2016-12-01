@@ -1,6 +1,6 @@
 \chapter{HIL felépítése}
 
-Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítmény elektronikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen javítható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépítése nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül. \cite{dirac}
+Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítmény elektronikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen javítható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépítése nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül. \cite{sutozoli}\cite{koki_varjasi}\cite{low_cost_rt_hil}\cite{hw_emu}
 
 \section{Hardware felépítése}
 
@@ -353,4 +353,4 @@ A kezdeti értékek meghatározása után azonban a modellen belüli számítás
 
 Szorzás esetén az eredményhez szükséges bitek számának változását az operandus kettes alapú logaritmusával számíthatjuk. A törrész bitek száma $-log_2\abs{a} = m$ bittel nő a törtrész bitek száma.
 
-Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagoyn kis számokat kell akkumulálni. 
+Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagyon kis számokat kell akkumulálni. A folytonos összegzés miatt az eredmény nagyra nőhet, a pontosságot azonban úgy kell megválasztnai, hogy ábrázolható legyen az inkrement. Szerencsére összeadni több biten is lehet az FPGA-ban, így nem okoz problémát nagyobb típust váalsztani, azonban az integrátor után vissza kell konvertálni 18 biten ábrázolható méretre, még ha ezzel a pontossábgól veszítünk is.
