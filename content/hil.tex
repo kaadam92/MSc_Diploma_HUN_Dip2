@@ -327,10 +327,30 @@ fixdt(0,8,10) & 0..0,25        	   	    & 0,0009765625 \\ \hline
 fixdt(0,8,8)  & 0..1     			 	& 0,00390625    \\ \hline
 fixdt(1,8,2)  & -31..32     			& 0,25    \\ \hline
 \end{tabular}
-\caption{My caption}
+\caption{A MATLAB fixpontos formátumai}
 \label{tab:fixdt}
 \end{table}
 
-\todo[inline]{Írni kell még a fixpontos dolgokról}
+A Simulink alapbeállításként double változóként hozza létre a jeleket és dolgozik velük. Az FPGA-val való kompatibilitás miatt azonban át kell étrni fixpontos ábárzolásra. Ennek a feladatnak a megkönnyítésére a MATLAB tartalmazza a \emph{Fixpoint Advisor} nevű eszközt, azonban ilyen kis méretű modell esetében az eszköz jó felparaméterezése tovább tarthat, mint maga a megvalósítás. Az egyes változók határai látszanak a vizsált értéktartományból. Ezen felül korlátot jelet még maga a hardver, mivel az FPGA maximum egy 18 és egy 25 bites számot tud összeszorozni. A mayimumális bitszám miatt tehát a pontosság és az ábrázolható értéktartomány között kell megtalálni az egyensúlyt.
 
-A Simulink alapbeállításként double változóként hozza létre a jeleket és dolgozik velük. 
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+Jel  					&		 tartomány              & választott adattípus \\ \hline
+Hálózati feszültség (V) & -1000-1000          	 		& fixdt()\\ \hline
+Hálózati áram (A) 		& -50..50						& fixdt()\\ \hline
+DC áram 				& -50..50        	   	   		& fixdt() \\ \hline
+DC feszültség  			& 0..1000     			 		& fixdt(0,18,6)    \\ \hline
+\end{tabular}
+\caption{A vizsgált jeltartományok}
+\label{tab:values}
+\end{table} 
+
+A kezdeti értékek meghatározása után azonban a modellen belüli számítások elvégézéséhez is meg kell találnunk a megfelelő típusokat. Ennek érdekében célszerű megvizsgálni, hogy az egyes műveletek milyen változást okoznak az ábrázolandó tartományban.
+
+Összeadás esetén ha fixdt(1,n,f1) és fixdt(1,n,f2) típusú számokat adunk össze (f1 < f2), esetén el kell dönteni, hogy a pontosság csökkenhet-e. Amennyiben igen, használhatjuk a továbbiakban a kevesebb törtrész bitet használó típust. Ha nem engedhető meg az ábárzolás pontosságának csökkenése fixdt(1,n+f1-f2,f1) típust kell választani kimenetként. Bár a táoláshoz szükséges bitek száma megnő, nem történik sem túlcsordulás és nem vesztünk az ábrázolási pontosságból sem.
+
+Szorzás esetén az eredményhez szükséges bitek számának változását az operandus kettes alapú logaritmusával számíthatjuk. A törrész bitek száma $-log_2\abs{a} = m$ bittel nő a törtrész bitek száma.
+
+Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagoyn kis számokat kell akkumulálni. 
