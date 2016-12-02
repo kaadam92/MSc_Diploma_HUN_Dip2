@@ -2,7 +2,7 @@
 
 \paragraph{}
 
-Tesla 1888-ban bemutatott három fázisú indukciós motorjával, nyilvánvalóvá vált, hogy az ilyen típusú gépek megbízhatóbbak és gazdaságosabbak tudnak lenni, mint az egyenáramú motorok. Jelentős hátrányuk azonban, hogy a vezérlésükhöz háromfázisú feszültséget kell előállítani, mely akkoriban cska egy szintén háromfázisú generátor segítségével volt megoldható. Manapság a háromfázisú teljesítmény a villamos hálózatnak köszönhetően rendelkezésre áll, azonban még így is vet fel prooblémákat ezen motorok üzemeltetése.
+Tesla 1888-ban bemutatott három fázisú indukciós motorjával, nyilvánvalóvá vált, hogy az ilyen típusú gépek megbízhatóbbak és gazdaságosabbak tudnak lenni, mint az egyenáramú motorok. Jelentős hátrányuk azonban, hogy a vezérlésükhöz háromfázisú feszültséget kell előállítani, mely akkoriban csak egy szintén háromfázisú generátor segítségével volt megoldható. Manapság a háromfázisú teljesítmény a villamos hálózatnak köszönhetően rendelkezésre áll, azonban még így is vet fel prooblémákat ezen motorok üzemeltetése.
 
 A frekvenciaváltó egy olyan eszköz mely váltakozó áramú bemenetből váltakozó áramú kimenetet állít elő, mint ahogy a neve is mutatja, más frekvenciával vagy akár feszültséggel, mint a bemenet. Erre azért van szükség, mert a meghajtani kívánt folyamatnak nagyon valószínű, hogy más igényei vannak, mint amit a hálózat önmagában képes biztosítani. Értem ez alatt azt, hogy közvetlen összeköttetés esetén a motorunk $50\ Hz-el$, vagy ennek egész számú hányadosával tudna forogni, illetve ennek a paraméter a befolyásolása fizikailag csak a motor módosításával lehetséges. Természetesen mint az ipar és az élet minden szegmensében itt is célunk a feladat minél hatékonyabb végrehajtása. A világon a teljes villamosenergia felhasználás mint egy $25\ \%-$-át adják a villamos hajtások és ez a szám folyamatosan nő (pl. az elektromos közlekedés térnyerésével). Az igény tehát nyilvánvaló ezeknek az eszközöknek a folyamatos fejlesztésére.
 
@@ -23,7 +23,7 @@ Ezek a modern eszközök már tartalmaznak mozgó alakrészt (feltéve persze, h
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width = \textwidth]{figures/topologies.jpg}
-	\caption{A frekvenciaváltó szerepe} 
+	\caption{A frekvenciaváltó típusok} 
 	\label{fig:topologies}
 \end{figure}
 
@@ -89,7 +89,7 @@ A frekvenciaváltó egyenirányítja a bejövő hálózati feszültséget, egy k
 	\label{fig:vfd_schema}
 \end{figure}
 
-Itt természetesen csak egy vázlatos ábrázolás látató, ezen nem szerepelnek a megható elektronikák, a vezérlés, a mérések, és még sok más. Jól látható azonban, hogy a folyamatra egyedül a félhidak vezérlésével tudunk hatni. A Frame 1-ben a kimeneti IGBT-k és diódák egy tokban vannak, egy Semikron SKiiP 24NAB12T4V1 modulban. \cite{sutozoli} \cite{ctan}
+Itt természetesen csak egy vázlatos ábrázolás látató, ezen nem szerepelnek a meghjató elektronikák, a vezérlés, a mérések, és még sok más. Jól látható azonban, hogy a folyamatra egyedül a félhidak vezérlésével tudunk hatni. A Frame 1-ben a kimeneti IGBT-k és diódák egy tokban vannak, egy Semikron SKiiP 24NAB12T4V1 modulban. \cite{sutozoli} \cite{ctan}
 
 \section{A szükséges kompetenciák}
 
@@ -98,7 +98,7 @@ A felépítés alapján elmondható, hogy egy iylen termék összeállítása na
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/n700_proto.jpg}
-	\caption{A frekvenciaváltó egyszerű felépítése} 
+	\caption{Az elkészült Frame 1 prototípus} 
 	\label{fig:n700_proto}
 \end{figure}
 
@@ -121,13 +121,15 @@ A teljesítményelektronikai eszközök fejlesztésének a nehézésége abban r
 
 \section{Különböző szimulációs eljárások összehasonlítása}
 
-Jól látható tehát, hogy egyértelmű igény mutatkozik valamilyen szimulációs eljárás használatára a fejlesztés minden szakaszában. Természetesen mint minden problémához, ehhez is többféle hozzáállást lehet alkalmazni. Ami mindekép közös az eljárásokban, hogy a kiváltott hardwarelelmek matematikai modelljeit fel kell állítani, azok helyességéről meg kell győződni. A modellezés pontossága és az erőforrás igény között azonban meg kell találni az adott alkalmazásnak és annak igényeinek megfelelő kompromisszumot. Elegedhetetlen követelmény azonban, hogy az irányító elektonika szempontjából a modell teljesen transzparens legyen, egyébként nem tudunk reprezentatív következtetést levonni a működés helyességével kapcsoaltban. Ez azt jelenti, hogy ugyan azokon az interfészeken keresztü tudjun a szimulátorral interakcióba lépni, ugyan azokat a válaszokat kapja a szakasztól, mint amit a valósgában is fog kapni, valamint az időzítések is egyezzenek meg az igazi eszközön tapasztaltakkal.
+\todo[inline]{Logikai bukfentc, korábban már van HIL, de csak most kezdem kibontani ,hogy mi is az.}
+
+Jól látható tehát, hogy egyértelmű igény mutatkozik valamilyen szimulációs eljárás használatára a fejlesztés minden szakaszában. Természetesen mint minden problémához, ehhez is többféle hozzáállást lehet alkalmazni. Ami mindnekép közös az eljárásokban, hogy a kiváltott hardver-elemek matematikai modelljeit fel kell állítani, azok helyességéről meg kell győződni. A modellezés pontossága és az erőforrás igény között azonban meg kell találni az adott alkalmazásnak és annak szükségleteinek megfelelő kompromisszumot. Elengedhetetlen követelmény azonban, hogy az irányító elektonika szempontjából a modell teljesen transzparens legyen, egyébként nem tudunk reprezentatív következtetést levonni a működés helyességével kapcsolatban. Ez azt jelenti, hogy ugyan azokon az interfészeken keresztül tudjunk a szimulátorral interakcióba lépni, ugyan azokat a válaszokat kapja a szakasztól, mint amit a valóságban is fog kapni, valamint az időzítések is egyezzenek meg az igazi eszközön tapasztaltakkal.
 
 Joggal merül fel a gondolat, hogy asztali számítógépen fontassuk a kifejlesztett modellt, hiszen szokványosan használjuk PC-nket különböző számítások elvégzésére. Nagyon hamar problémába ütközünk. Az első követelmény, hogy rendelkezzen a számítógépünk adatgyűjtő modullal (DAQ - Data Aqusition Module), mely segítségével tudunk mérni és előállítani analóg és digitális jeleket. Ilyen eszközöket lehet kereskedelmi forgalomban kapni, kérdéses azonban a biztosított sávszélesség, a számítógéppel való kommunikáció sebessége, illetve a költsége a vásárolt hardvernek. Ezen felül korlát még az időzítések betartása. Nem is biztos, hogy a számítógépünk valós időben el tudja végezni a szimulációhoz szükséges matekmatikai műveleteket, de ha feltételezzük, hogy igen az egzakt és konzisztens lépésköz egy általános célú asztali számítógépen nem garantálható az operációs rendszer sajátságaiból adódóan. Állnak rendelkezésre valós idejű megoldások, például valós idejű futást támogató Linux kernel, melyet hasonló célra fejlesztettek ki. A számítógép hardveres konfigurációja is korlátot jelent, mert hiába növeljük a processzor teljesítményt, egy ponton túl ($1 - 10 \mu{}s$) a memóriahozzáférések késleltetése miatt nem tudunk kisebb szimulációs lépésközt biztosítani.
 
 A következő lehetőség saját beágyazott hardware fejlesztése, mely emulálja a valós teljesítményelektronikát. Ebben az esteben teljesen testre tudjuk szabni a kapcsolódási pontot, elő tudjuk állítani azokat a jeleket, melyeket vár a vezérlő elektornia, pontosan úgy ahgyo szeretnénk. Előnye a beágyazott processzornak, hogy architektúrájából adódóan garantált futásidőt lehet elérni. A teljesítménye azonban korlátozott az asztali számítógéphez képest, bár, mivel csak egy specifikus feladatot kell végrehajtani, akár még versenyezhet is futásidőben az asztali számítógéppel. Fentiek miatt ez a megoldás leginkább funkcionális tesztek végrehajtására alkalmas, precíz, kvantitatív tesztekre korlátozotan.
 
-A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alapú hardware-in-the-loop szimulátor tervezése. Bár a költsége a fejlesztési időt és a hardware költésget tekintve szintén magas lehet, az FPGA architektújából adódóan, nevezetesen létre tudjuk benne hozni az éppen szükséges számításokat elvégző hardvert, rendkívül gyors futásidő érhető el. Ráadásul a PC-vel ellentétben itt az FPGA teljesítményének és órajelének növelésével egyre nagyobb felbontású szimulációt érhetünk el. Sebességét tekintve pedig mai technológiával is elérhető $100 - 10 \ ns$ futásidő.
+A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alapú hardware-in-the-loop szimulátor tervezése. Bár a költsége a fejlesztési időt és a hardware költésget tekintve szintén magas lehet, az FPGA architektújából adódóan, nevezetesen létre tudjuk benne hozni az éppen szükséges számításokat elvégző hardvert, rendkívül gyors futásidő érhető el. Ráadásul a PC-vel ellentétben itt az FPGA teljesítményének és órajelének növelésével egyre nagyobb felbontású szimulációt érhetünk el.
 
 \begin{figure}[h]
 	\centering
@@ -136,3 +138,4 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 	\label{fig:hil_idea}
 \end{figure}
 
+\todo[inline]{Köki ppt-t behivatkozni}
