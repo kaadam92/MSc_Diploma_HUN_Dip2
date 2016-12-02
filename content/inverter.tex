@@ -178,3 +178,14 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 \underline{y}[n] &= \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
 \end{align*} 
 \end{equation}
+
+\begin{equation}
+\begin{align*}
+\underline{a}[n] &= \underline{\underline{A}}\cdot \underline{x}[n] + \underline{\underline{B}}\cdot{}\underline{u}[n] \\[0.3em]
+\underline{b}[n] &= \underline{\underline{A}}\cdot (\underline{x}[n] + \frac{1}{2}T \cdot \underline{a}[n]) + \underline{\underline{B}}\cdot{}\underline{x}[n + 0,5] \\[0.3em]
+\underline{c}[n] &= \underline{\underline{A}}\cdot (\underline{x}[n] + \frac{1}{2}T \cdot \underline{b}[n]) + \underline{\underline{B}}\cdot{}\underline{x}[n + 0,5] \\[0.3em]
+\underline{d}[n] &= \underline{\underline{A}}\cdot (\underline{x}[n] + T \cdot \underline{c}[n]) + \underline{\underline{B}}\cdot{}\underline{x}[n + 1] \\[0.3em]
+\underline{x}[n+1] &= \underline{x}[n] + \frac{1}{6}T \cdot{} (\underline{a}[n] + 2 \cdot{} \underline{b}[n] + 2 \cdot{} \underline{c}[n] + \underline{d}[n]) \\[0.3em]
+\underline{y}[n] &= \underline{\underline{C}} \cdot{} \underline{x}[n] + \underline{\underline{D}} \cdot \underline[n]
+\end{align*} 
+\end{equation}
