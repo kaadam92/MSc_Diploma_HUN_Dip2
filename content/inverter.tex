@@ -144,19 +144,18 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 
 \begin{equation}
 \begin{align*}
-\underline{x}'(t) = \underline{\underline{A}}\cdot \underline{x}(t) + \underline{\underline{B}}\cdot{}\underline{x}(t) \\[0.3em]
-
-\underline{y}(t) = \underline{\underline{C}}\cdot \underline{x}(t) + \underline{\underline{D}}\cdot{}\underline{x}(t)
+\underline{x}'(t) &= \underline{\underline{A}}\cdot \underline{x}(t) + \underline{\underline{B}}\cdot{}\underline{x}(t) \\[0.3em]
+\underline{y}(t) &= \underline{\underline{C}}\cdot \underline{x}(t) + \underline{\underline{D}}\cdot{}\underline{x}(t)
 \end{align*} 
 \end{equation}
 
 \begin{equation}
 \begin{align*}
-\underline{x}[n + 1] = (\underline{\underline{A}} \cdot T + \underline{\underline{I}}) \cdot \underline{x}[n] + \underline{\underline{B}}\cdot{}T\cdot{}\underline{x}[n] \\[0.3em]
-
-\underline{y}[n] = \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
+\underline{x}[n + 1] &= (\underline{\underline{A}} \cdot T + \underline{\underline{I}}) \cdot \underline{x}[n] + \underline{\underline{B}}\cdot{}T\cdot{}\underline{x}[n] \\[0.3em]
+\underline{y}[n] &= \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
 \end{align*} 
 \end{equation}
+
 
 \begin{equation}
 \underline{x}[n + 1] = \ x[n] + \underline{\underline{A}} \cdot T \cdot \underline{x}[n + 1] + \underline{\underline{B}}\cdot{}T\cdot{}\underline{u}[n+1] \\[0.3em]
@@ -164,9 +163,8 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 
 \begin{equation}
 \begin{align*}
-\underline{x}[n + 1] = (\underline{\underline{A}} \cdot T + \underline{\underline{I}})^{-1} \cdot\underline{x}[n] + (\underline{\underline{I}} - \underline{\underline{A}} \cdot T)^{-1} \underline{\underline{B}}\cdot{}T\cdot{}\underline{x}[n + 1] \\[0.3em]
-
-\underline{y}[n] = \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
+\underline{x}[n + 1] &= (\underline{\underline{I}} - \underline{\underline{A}} \cdot T )^{-1} \cdot\underline{x}[n] + (\underline{\underline{I}} - \underline{\underline{A}} \cdot T)^{-1} \underline{\underline{B}}\cdot{}T\cdot{}\underline{x}[n + 1] \\[0.3em]
+\underline{y}[n] &= \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
 \end{align*} 
 \end{equation}
 
@@ -176,9 +174,7 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 
 \begin{equation}
 \begin{align*}
-\underline{x}[n + 1] = (\underline{\underline{A}} \cdot T + \underline{\underline{I}})^{-1} \cdot\underline{x}[n] + (\underline{\underline{I}} - \underline{\underline{A}} \cdot T)^{-1} \underline{\underline{B}}\cdot{}T\cdot{}\underline{x}[n + 1] \\[0.3em]
-
-\underline{y}[n] = \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
+\underline{x}[n + 1] &= (\underline{\underline{I}} - \frac{1}{2}\underline{\underline{A}} \cdot T )^{-1} \cdot{} (\underline{\underline{I}} + \frac{1}{2}\underline{\underline{A}} \cdot T )^{-1} \cdot{} \underline{x}[n] + (\underline{\underline{I}} - \frac{1}{2}\underline{\underline{A}} \cdot T)^{-1} \cdot{} \\ (\frac{1}{2}\underline{\underline{B}} \cdot{} T \cdot{} \underline{u}[n+1] + \frac{1}{2}\underline{\underline{B}} \cdot{} T \cdot{} \underline{u}[n])  \\[0.3em]
+\underline{y}[n] &= \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
 \end{align*} 
 \end{equation}
-
