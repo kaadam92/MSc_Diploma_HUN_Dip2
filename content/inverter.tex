@@ -143,9 +143,15 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 \section{Szimulációs algoritmusok}
 
 \begin{equation}
-\begin{align}
+\begin{align*}
 \underline{x}'(t) = \underline{\underline{A}}\cdot \underline{x}(t) + \underline{\underline{B}}\cdot{}\underline{x}(t) \\[0.3em]
 \underline{y}(t) = \underline{\underline{C}}\cdot \underline{x}(t) + \underline{\underline{D}}\cdot{}\underline{x}(t)
-\end{align} 
+\end{align*} 
 \end{equation}
 
+\begin{equation}
+\begin{align*}
+\underline{x}[n + 1] = (\underline{\underline{A}} \cdot T + \underline{\underline{I}} \underline{x}[n] + \underline{\underline{B}}\cdot{}T\cdot{}\underline{x}(t) \\[0.3em]
+\underline{y}[n] = \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
+\end{align*} 
+\end{equation}
