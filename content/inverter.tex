@@ -129,7 +129,7 @@ Joggal merül fel a gondolat, hogy asztali számítógépen fontassuk a kifejles
 
 A következő lehetőség saját beágyazott hardware fejlesztése, mely emulálja a valós teljesítményelektronikát. Ebben az esteben teljesen testre tudjuk szabni a kapcsolódási pontot, elő tudjuk állítani azokat a jeleket, melyeket vár a vezérlő elektornia, pontosan úgy ahgyo szeretnénk. Előnye a beágyazott processzornak, hogy architektúrájából adódóan garantált futásidőt lehet elérni. A teljesítménye azonban korlátozott az asztali számítógéphez képest, bár, mivel csak egy specifikus feladatot kell végrehajtani, akár még versenyezhet is futásidőben az asztali számítógéppel. Fentiek miatt ez a megoldás leginkább funkcionális tesztek végrehajtására alkalmas, precíz, kvantitatív tesztekre korlátozotan.
 
-A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alapú hardware-in-the-loop szimulátor tervezése. Bár a költsége a fejlesztési időt és a hardware költésget tekintve szintén magas lehet, az FPGA architektújából adódóan, nevezetesen létre tudjuk benne hozni az éppen szükséges számításokat elvégző hardvert, rendkívül gyors futásidő érhető el. Ráadásul a PC-vel ellentétben itt az FPGA teljesítményének és órajelének növelésével egyre nagyobb felbontású szimulációt érhetünk el.
+A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alapú hardware-in-the-loop szimulátor tervezése. Bár a költsége a fejlesztési időt és a hardware költésget tekintve szintén magas lehet, az FPGA architektújából adódóan, nevezetesen létre tudjuk benne hozni az éppen szükséges számításokat elvégző hardvert, rendkívül gyors futásidő érhető el. Ráadásul a PC-vel ellentétben itt az FPGA teljesítményének és órajelének növelésével egyre nagyobb felbontású szimulációt érhetünk elde már a mai technológia is $100 - 10 \ ns$ futásidőre képes.
 
 \begin{figure}[h]
 	\centering
@@ -139,3 +139,10 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 \end{figure}
 
 \todo[inline]{Köki ppt-t behivatkozni}
+
+\section{Szimulációs algoritmusok}
+
+\begin{equation}
+\underline{x}'(t) = \underline{\underline{A}}\cdot \underline{x}(t) + \underline{\underline{B}}\cdot{}\underline{x}(t) \\
+\underline{y}(t) = \underline{\underline{C}}\cdot \underline{x}(t) + \underline{\underline{D}}\cdot{}\underline{x}(t)
+\end{equation}
