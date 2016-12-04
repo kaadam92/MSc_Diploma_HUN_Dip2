@@ -140,7 +140,7 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 
 \todo[inline]{Köki ppt-t behivatkozni}
 
-\section{Szimulációs algoritmusok}
+\section{Szimulációs algoritmusok}\cite{koki_varjasi}
 
 Az áramköri szimulációk numerikus megoldása általában differenciálegyenlen rendserekre vezethetőek vissza. Az irodalom számos megoldásról említést tesz. A legtöbb esteben a modellezendő szakasz matematikai modelljét felállítjuk, egy ismert gerjesztésre való váalsz alapján, majd az így kepott modellt diszkretizáljuk.
 
@@ -153,9 +153,8 @@ Egy álatlános folytonos idejű rendszert az alábbi egenletek reprezentálnak:
 \end{align*} 
 \end{equation}
 
-ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendszer bemenete, $\underline{y}$ pedig a rendszer által adott váalsz.
-
-
+ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendszer bemenete, $\underline{y}$ pedig a rendszer által adott válasz.
+A legegyszerűbb numerikus megoldó módszer az Euler módszer, mely az állapotváltozók módosításán alapul, minden lépésben maguk az állapotváltozók és a bemenet aktuális értéke alapján. A diszkretizált egyenletrendszer az előre lépő Euler módszert alkalmazva az alábbi alakot ölti:
 
 \begin{equation}
 \begin{align*}
@@ -164,10 +163,14 @@ ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendsz
 \end{align*} 
 \end{equation}
 
+ahol $\underline{\underline{I}}$ az egységmátrix, T a lépésköz, n pedig az aktuális lépés indexe.
+Egy másik változata a az előrelépő Euler módszernek a hátralépő Euler módszer, vagy más néven implicit Euler módszer. A különbség a két módszer között, hogy az implicit Euler az aktuális értékek helyett a következő lépés értékeit használja:
 
 \begin{equation}
 \underline{x}[n + 1] = \ x[n] + \underline{\underline{A}} \cdot T \cdot \underline{x}[n + 1] + \underline{\underline{B}}\cdot{}T\cdot{}\underline{u}[n+1] \\[0.3em]
 \end{equation}
+
+Mivel $\underline{x}[n+1]$ az egyenlet mindkét oldalán megjelenik, implicit módszerről beszélünk. Átrendezés után az állapotegyenelet az alábbi alakot öltik:
 
 \begin{equation}
 \begin{align*}
@@ -176,9 +179,14 @@ ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendsz
 \end{align*} 
 \end{equation}
 
+A formulából jól látszik, hogy az akutális érétk kiszámításához szükség van a változók ,,jövőbeni'' értékére. Erre következtethetünk a változók jelenlegi értékéből, vagy további késleltetést adva a rendszerhez összegyűjthetjük a számításhoz szükséges értékeket.
+A két korábbi módszer kombinációja, mely széles körben alkalmazott szimulációs eljárások során a következő. Ez a módszer a trapéz módszer, a változók jelenlegi és következő lépésbeli értékk átlagát használja, így jobb közelítést adva, mintha két korábbi értéket használna:
+
 \begin{equation}
 \underline{x}[n + 1] = \ x[n] + \frac{1}{2}\underline{\underline{A}} \cdot T \cdot \underline{x}[n + 1] + \frac{1}{2}\underline{\underline{A}}\cdot{}T\cdot{}\underline{u}[n] + \frac{1}{2}\underline{\underline{B}} \cdot T \cdot \underline{x}[n + 1] + \frac{1}{2}\underline{\underline{B}}\cdot{}T\cdot{}\underline{y}[n] \\[0.3em]
 \end{equation}
+
+Látható, hogy ez szintén egy implicit módszer, hiszen ez is tartalmazza $\underline{x}[n+1]$-et mindkét oldalon, illetve szintán támaszkodi ka gerjesztés jövőbeni értékére is. Kifejezve $\underline{x}[n+1]$-et az alábbi alakot kapjuk:
 
 \begin{equation}
 \begin{align*}
@@ -186,6 +194,10 @@ ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendsz
 \underline{y}[n] &= \underline{\underline{C}}\cdot \underline{x}[n] + \underline{\underline{D}}\cdot{}\underline{x}[n]
 \end{align*} 
 \end{equation}
+
+Az összes módszer mátrixműveletekre vezethető vissza, az implementációjukhoz csupán mátrix szorzásre és öszeadásra van szükség. Egy olyan szimulátor, amlegy általános állapotegyeneltek megoldására képes, igen ruglamas tud lenni, a mátrixok együtthatóinak változtatásásval, különböző rendszerek szimulációit hozhatjuk létre. További numerikus integráláson alapuló algoritmusok is állnak rendelkezésre, de ezek már másodrendű módszerek, amely azt jelenti, hogy szükségük van az állapotávltozók még korábbi értékeire, melyek igencsak megnöveli a számítási igényt.
+
+Szintén gyakran használt közelítő algoritmus a negyedrendű Runge-Kutta módszer, mely a numerikus integrálástól eltérő megközelítést alkalmaz.
 
 \begin{equation}
 \begin{align*}
@@ -197,3 +209,5 @@ ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendsz
 \underline{y}[n] &= \underline{\underline{C}} \cdot{} \underline{x}[n] + \underline{\underline{D}} \cdot \underline[n]
 \end{align*} 
 \end{equation}
+
+ahol $\underline{a}$, $\underline{b}$, $\underline{c}$, és $\underline{d}$ csak ideiglenesen használt vektorok. Enek az algoritmusnak nem csak a gerjesztés következő értékére, hanem a két lépés közötti ($\underline{u}[n+0,5]$), melyet könnyedén megoldhatunk a bemenet kétszeres frekvenciájú mintavételezésével, vagy a két egymást követő érték átlagának kiszámításával.
