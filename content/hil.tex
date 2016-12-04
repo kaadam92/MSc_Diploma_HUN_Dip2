@@ -416,7 +416,7 @@ Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advis
 
 Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást is beállítottuk az összes változóra, készen állunk a verilog fájlok előállítására. Ehhez szükséges a Matlab HDL Coder toolboxa. Amennyiben rendelkezünk ezzel, a HDL Workflow Advisor lesz a segítségünkre a folyamat elvégzésében.
 
-\begin{figure}[H]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/hdl_advisor.png}
 	\caption{A HDL workflow advisor ablaka} 
@@ -425,7 +425,7 @@ Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást 
 
 Első lépésben be kell állítani, hogy miylen típusú FPGA-ra szretnénk kódot generálni, valamint be kell állítani, hogy hova készüljön el a projekt. Ezek után a szoftver még egyszer ellenőrzi, hogy a modellből lehet-e HDL kódot generálni. Ellenőrzi, hogy van-e esetleg nem támogatott blokk a modellben, van-e algebrai hurok, illetve az időzítések megfelelőek-e. Ha minden teszt sikeres volt, akkor egyben le is futtathatjuk a taskokat a projekt létrehozásáig, a többi lépésre nincsen szükség. Ezzel előáll a verilog projekt, és ha minden sikeres volt az alábbi ablak fogad minket.
 
-\begin{figure}[H]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/hdl_report.png}
 	\caption{A folyamat végi üzenet} 
