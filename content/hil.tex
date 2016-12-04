@@ -76,7 +76,12 @@ Analóg jeleket tekintve csak bemenet találhat óa CCB-n. Ezen jelek előállí
 
 A fent említett jeleken kívül a HIL-en elhelyeésre került az ULINK és az St-Link debuggerek csatlakozója is, a fejlesztés kényelmesebbé tételének érdekében. A CCB-re a JTAG jelei egy külön flat-flex kábel segítségével csatlakoznak. Ennek a mechanikai teherbíása igen alacsony, így pedig nem kell egy külön kártyára csatlakoztatni, kockáztatva ezzel az elmozdulást, kontakthibát vagy vezetékszakadást.
 
-\todo[inline]{Blokkvázlat a HIL-ről}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{figures/hil.jpg}
+	\caption{A HIL vázlatos felépítése} 
+	\label{fig:hil_block}
+\end{figure}
 
 \subsection{Tápegység}
 A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technologies \emph{LT3845AEFE#PBF} szinkron buck tápegység vezérlő IC és a hozzá tartozó külső apparátus állítja aelő az $5 V$-os tápfeszültséget mind az FPGA mind pedig a CCB számára. A tápegység maximálisan $6 A$ terhelhetőségű, amely előser soknak tűnhet, de az FPGA fogyasztását jelentpsen befolyásolja a benne található firmware, így elképzelhető az kapacitás teljes felhasználása is, kis teljesítmény esetén edig hatékony tud maradni az ún. \emph{Burst mode} működési mód segítségével.
