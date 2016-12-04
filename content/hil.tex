@@ -1,6 +1,6 @@
 \chapter{HIL felépítése}
 
-Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítmény elektronikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen javítható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépítése nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül. \cite{sutozoli}\cite{koki_varjasi}\cite{low_cost_rt_hil}\cite{hw_emu}
+Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítmény elektronikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen javítható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépítése nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül. \cite{sutozoli}\cite{low_cost_rt_hil}\cite{hw_emu}
 
 \section{Hardware felépítése}
 
@@ -216,30 +216,13 @@ A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blok
 	\label{fig:input_marked}
 \end{figure}
 
-A számítások megkönnyítése érdekében célszerű a háromfázisú hálózatot x-y komponensekkel reprezentálni. Erre azért van lehetőség, mert a három mennyiség által reprezentált információt lehetséges csupán két jellel ábrázolni. A háromfázisú mennyiségekből az alábbi összefüggés segítségével az x és y összetevőket.
+Az első lépés a hálózat modellezése. Ehhez szükségünk van egy szinuszos feszültség előállítására. Mivel a hálózatot egy soros RL modell adja, melynek átviteli függvénye az alábbi. 
 
 \begin{equation}
-\centering
-\begin{bmatrix}
-       U_x\\[0.3em]
-       U_y\\[0.3em]
-       U_0 
-\end{bmatrix}
-=
-\begin{bmatrix}
-       \frac{2}{3} & -\frac{1}{3} & -\frac{1}{3}  \\[0.3em]
-       0 & \frac{1}{\sqrt{3}} & -\frac{1}{\sqrt{3}}  \\[0.3em]
-       \frac{1}{3} & \frac{1}{3} & \frac{1}{3}    
-\end{bmatrix}
-\begin{bmatrix}
-       U_a\\[0.3em]
-       U_b\\[0.3em]
-       U_c    
-\end{bmatrix}
+I(s) = \frac{U(s)}{R+Ls}
 \end{equation}
 
-Ezek után a hálózatparamétereket csak két ,,fázison'' kell figyelembe venni.  Ezek a hálózat paraméterek egy soros R-L modellel lettek figyelembe véve. Az így előállt x és y komponensű áramokból inverz Clarke-transzformáció segítségével elő tudjuk állítani a három fázisáramot. A diódák ideális töréspontos karakterisztikával kerültek modellezésre. Ez azt jelenti, hogy az áram értékek negatív komponensét levágjuk a pozitív értékek pedig változtatás nélkül továbbításra kerülnek. Az így kapott áramokat összegezve megkapjuk a DC fojtó áramát. A modellalkotás ezen pontján komplikációk merülnek fel, mert a diódaáramokból nem következik közvetelnül a fojtó árama, ezért itt az álapotávltozókat szétválasztjuk egy virtuális R-C tag bevezetésével. Ennek segítségével bevezethető ezen a ponton is egy potenciál, így pedig a DC fojtó könnyedén modellezhetővé válik. A DC fojtó árama és a terhelő áram különbsége tölti a DC kondenzátort, amelyen így létrejön a DC feszültség.
-
+Mivel a három fázis induktivitása nem független egymástól, ezért az egyes fázisok egymásra hatását is fogyelembe kell venni a szimuláció során. Ez jelentős számításbeli töbleetet jelenteni, a modell struktúráját is bonyolítaná, ezért a fázisokat inkább szétcsatoljuk és az $x,y$ koordinátarendszerben ábrázoljuk őket. Emiatt a szinusz generátor modulban máregyből egy sinust és cosinust hozunk léra, azaz két szinusz hullámot, $90°$ fáziskülönbséggel. Ezt a két jelet vezetjük át egy-egy R-L blokkon megkapva így a hálózati áramokat. Azért, hogy visszakapjuk a háromfázisú mennyiségeket, inverz Clarke transzoformációt alkalmazunk a két jelent, ígyelőáll a három fázis árama, mely a diódás híd bemenetéül szolgál.
 
 \begin{equation}
 \centering
@@ -261,18 +244,76 @@ Ezek után a hálózatparamétereket csak két ,,fázison'' kell figyelembe venn
 \end{bmatrix}    
 \end{equation}
 
+\begin{equation}
+\centering
+\begin{bmatrix}
+       U_x\\[0.3em]
+       U_y\\[0.3em]
+       U_0 
+\end{bmatrix}
+=
+\begin{bmatrix}
+       \frac{2}{3} & -\frac{1}{3} & -\frac{1}{3}  \\[0.3em]
+       0 & \frac{1}{\sqrt{3}} & -\frac{1}{\sqrt{3}}  \\[0.3em]
+       \frac{1}{3} & \frac{1}{3} & \frac{1}{3}    
+\end{bmatrix}
+\begin{bmatrix}
+       U_a\\[0.3em]
+       U_b\\[0.3em]
+       U_c    
+\end{bmatrix}
+\end{equation}
 
-%\begin{equation}
-%    \centering
-%    U_a+U_b+U_c = 0
-%\end{equation}
+A Clarke transzformáció arra szolgál, hogy egyszerűsítsük a háromfázisú rendszerekben elvégzendő számításokat, mivel a három jellemző mennyiséget csupán kettővel reprezentálja. További előnye, hogy a nulla sorrendű komponensek a számítások során kiesnek, amire jelen esetben csak akkor lenne szükségünk, ha földzárlatot is kívánnánk szimulálni.
+
+A didódás modell nagyon leegyszerűsített, csak azon üzemállapotát reprezántálja a 3 fázisú 2 utas, 6 ütemű egyenirányítónak, amikor két dióda vezet benne. Ezt pedig úgy valósítjuk meg, hogy mind a három fázis negatív tatományát levágjuk, ezek után pedig az áramok összegezhetővé válnak, így előállítva az $I_{rect}$ egyenirányított áramot. A diódákon eső feszültséget pedig úgy állítjuk elő, hogy ahhoz a diódához, amelyik éppen vezet, hozzárendeljük az $U_rect$ egyenirányított feszültséget. A hálózatra való visszahatás kiszámításához azonban az így kapott háromfázisú mennyiséget vissza kell alakítanunk $x,y$ tartomány beli mennyiségekké, erre szolgál a Clark traszformáció.
+
+Ezen a ponton két problémába is ütközünk: a didás hídnak nincs olyan állapota ,hogy egyik dióda sem vezet, emiatt a DC kondenzátorunk a végelenségig töltődik. A jövőben tervezem a modell további finomításást, ehhez egy állapotgépet kell majd megvalósítani, a modell demonstrációs jellegére való tekintettel azonban most mást megoldást válaszottam. Empirikus úton kiderül, hogy a kondenzátort minimum $350\ mA$-el terhelni kell, hogy ne inegrálódjon el, hanem stabilizálódjon az értéke.
+
+A msáik probléma abból adódik, hogy DC fojtó modelljének feszültség bementere van szüksége, és áram kimenetet ad, a diódás hídnak pedig áram kimenete van. Más struktúrájú modellel lehetséges így is megvalósítani a szimulációt, azonban egyszerűbb szétválasztani ezeket az állapotávltozókat egy virtuális RC-tag bevezetésével. Ennek segítségével az egyenirányító és a fojtó között is megjelenik a modellben egy potenciál. Az RC-tag paramétereit úgy választjuk meg, hogy az a modell valós működésést ne befolyásolja. Úgy is tekinthetünk erre a tagra, mint egy PI szabályzóra, mely az induktivitáson eső feszültséget igyekszik $0$-ra szabályozni, felvéve a DC-link kondenzátor feszültségét.
 
 \begin{figure}[H!]
+	\centering
+	\includegraphics[width = \textwidth]{figures/VFD_virtual_RC.png}
+	\caption{A frekvenciaváltó modellezett szakasza} 
+	\label{fig:virtualRC}
+\end{figure}
+
+Ez így kiszámolt áramból kivonva a terhelés áramát meg kapjuk a DC kondenzátort töltő áramot.
+
+Az így kialakult modell paraméterei \aref{tab:parameters}. táblázatban láthatóak. A DC fojtó induktivitását úgy kell érteni, hogy a valós rendszerben a negatív és a pozitív sínen is van egy-egy fojtó, azonban a modellben ez a kettő egyesítve van.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+Hálózati feszültség            & $325\ V$ 		\\
+Hálózati ellenállás            & $2\ m\omega$   \\
+Hálózati induktivitás          & $20\ \mu{}H$    			\\
+DC fojtó induktivitása         & $2 \cdot{} 3\ mH$    			\\
+DC link kondenzátor kapacitása & $270 \mu{}F $   
+\end{tabular}
+\caption{A modell paraméterei}
+\label{parameters}
+\end{table}
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width = \textwidth]{figures/continous_testrun_1.png}
 	\caption{A frekvenciaváltó modellezett szakasza} 
 	\label{fig:cont_run}
 \end{figure}
+
+\subsection{A DC fojtó szerepe}
+
+A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojtót alkalmazni. 
+
+\begin{figure}[H!]
+	\centering
+	\includegraphics[width = \textwidth]{figures/choke_vs_nochoke_11A.png}
+	\caption{A DC fojtó szerepe} 
+	\label{fig:cont_run}
+\end{figure}
+
 
 
 \subsection{Áttérés diszrét időre}
