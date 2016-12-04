@@ -139,9 +139,18 @@ A mi esetünkben két részre bontható az átalakító. A modellben fut egy ana
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width = 0.75\textwidth]{figures/sigmadelta.png}
+	\includegraphics[width = 0.75\textwidth]{figures/first_order_ds.png}
 	\caption{A szigma-delta átalakító} 
 	\label{fig:sigmadelta}
+\end{figure}
+
+\Aref{fig:nosie}. ábárn megfigyelhető, hogy hogyan változtajuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvenciatartományba tolja a zajt, melynek ezáltal az efektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy aluláteresztő szűrőn
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width = 0.75\textwidth]{figures/first_ordered_ds_2.png}
+	\caption{A szigma-delta átalakító} 
+	\label{fig:noise}
 \end{figure}
 
 Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet.
