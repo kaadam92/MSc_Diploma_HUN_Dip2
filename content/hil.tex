@@ -45,7 +45,6 @@ FanExtCtrC     & Digital      & Kimenet      &                                 \
 FanIntCtrC     & Digital      & Kimenet      &                                 \\ \hline
 FanExtSpeedC1  & Digital      & Kimenet      &                                 \\ \hline
 FanExtSpeedC2  & Digital      & Kimenet      &                                 \\ \hline
-5V\_Loopback   & Power        &              &                                 \\ \hline
 TIgbtW         & Analog       & Bemenet      &                                 \\ \hline
 15VCM          & Analog       & Bemenet      &                                 \\ \hline
 TIgbtV         & Analog       & Bemenet      &                                 \\ \hline
@@ -69,7 +68,7 @@ UdcN           & Analog       & Bemenet      &                                 \
 \label{ccbsignals}
 \end{table}
 
-Ezek azok a jelek, amiket a HIL-nek vagy szimulálnia, vagy pedig fogadnia kell. Kivételt képez ez alól az \emph{5V\_Loopback}. Ennek a funkciója az, hogy létre lehet hozni a PIB-en olyan áramköri részeket, melyek az $5\ V$-os táplálást csak a CCB-n keresztül kapják meg, így nem indulnak el csatlakoztatott kártya nélkül.
+Ezek azok a jelek, amiket a HIL-nek vagy szimulálnia, vagy pedig fogadnia kell. Ezen felül található a csatlakozón még két \emph{5V\_Loopback} nevű láb, ezt a táblázatben nem jelenítettem meg. Ennek a funkciója az, hogy létre lehet hozni a PIB-en olyan áramköri részeket, melyek az $5\ V$-os táplálást csak a CCB-n keresztül kapják meg, így nem indulnak el csatlakoztatott kártya nélkül.
 
 A digitális jelek esetében a feladat egyszerű, csak a CCB és az FPGA közti jelszint különbséget kell megoldani. Ebben egy \emph{74LVC8T245PW} típusú level-shifter lesz segítségünkra. A CCB a jelekt $5\ V$-os tartományban adja ki, illetve fogadja, az FPGA maximális kiementi feszültésge $3,3\ V$, és nem is állnak rendelkezésre nagyobb feszültséget toleráló lábak. A kisebb feszültségre való átalakításra lehetséges megoldás a feszültségosztó is, de a nagysebességű jelek dinamikájának megőrzése érdekében inkább itt is a level-shiftert választottam. A lassabb jelek esetében maradtam a feszültségosztóval való megoldásnál.
 
@@ -155,6 +154,15 @@ Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az F
 \end{figure}
 
 \Aref{fig:lowpass} ábrán látható aluláteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatalkozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós enelktronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez a zavar nem jelentős, így a mérés negatív jelét földre kötjük.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width = \textwidth]{figures/sigma_delta_sim.png}
+	\caption{Az aluláteresztő szűrő szimulációja TI Tina szoftver segítségével} 
+	\label{fig:lowpass_sim}
+\end{figure}
+
+\Aref{fig:lowpass_sim}. ábrán látható a szűrő átvitelének szimulációja. Két töréspont látható a Bode-diagrammon $10\ Hz$ és $10\ kHz$ frekvenciánál. A szűrő méretezésénél figyelembe kell venni a kimeneti jelek sávszélességét, ami a mi esteünkben $1\ kHz$ alatt van, illetve a kiementei négyszögjel frekvenciáját. Ez $18\ MHz$, így biztosak lehetünk benne, hogy a kimeneti jel az alkalmazás igényeinek megfelelő.
 
 \section{Simulink modell}
 
@@ -305,13 +313,13 @@ DC link kondenzátor kapacitása & $270\ \mu{}F $
 
 \subsection{A DC fojtó szerepe}
 
-A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojtót alkalmazni. 
+A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojtót alkalmazni. Enélkül a DC kondenzátor, mint kis impedanciás terhelés jelenne meg a hálózat felé. Ha felteszünk egy ipari környezetben szokásos $1,6\ MVA$-s hálózatot, egyértelművé válik, hogy a hálózatból nagyságrendekkel nagyobb áramot ki tudunk venni, mint a frekvenciaváltó üzemi érétkei, ebből adódóan a kondenzátor minden kommutációnál óriási áramtüskékkel töltődne. Az induktivitás ezeket a tüskéket simítja el, csükkentve a DC kondenzátort érő áramhullámosságot és a feszültséghullámosságot is. \aref{fig:chokenochoke}. ábrán látható egy DC folytós és egy anélküli simuláció eredménye. Látható, hogy a folytóval ellátott esetben jelentősen kisebb a DC hullámosság, valamint az áram jelalakja is sokkal simább.
 
 \begin{figure}[H!]
 	\centering
 	\includegraphics[width = \textwidth]{figures/choke_vs_nochoke_11A.png}
 	\caption{A DC fojtó szerepe} 
-	\label{fig:cont_run}
+	\label{fig:chokenochoke}
 \end{figure}
 
 
