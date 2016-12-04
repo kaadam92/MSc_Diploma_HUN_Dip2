@@ -144,18 +144,15 @@ A mi esetünkben két részre bontható az átalakító. A modellben fut egy ana
 	\label{fig:sigmadelta}
 \end{figure}
 
+
+\Aref{fig:nosie}. ábárn megfigyelhető, hogy hogyan változtajuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvenciatartományba tolja a zajt, melynek ezáltal az efektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy aluláteresztő szűrőn.
+
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width = \textwidth]{figures/noiseshape.png}
 	\caption{A szigma-delta átalakító} 
 	\label{fig:asd}
 \end{figure}
-
-
-
-\Aref{fig:nosie}. ábárn megfigyelhető, hogy hogyan változtajuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvenciatartományba tolja a zajt, melynek ezáltal az efektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy aluláteresztő szűrőn.
-
-
 
 Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet.
 
@@ -414,3 +411,29 @@ A kezdeti értékek meghatározása után azonban a modellen belüli számítás
 Szorzás esetén az eredményhez szükséges bitek számának változását az operandus kettes alapú logaritmusával számíthatjuk. A törrész bitek száma $-log_2\abs{a} = m$ bittel nő a törtrész bitek száma.
 
 Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagyon kis számokat kell akkumulálni. A folytonos összegzés miatt az eredmény nagyra nőhet, a pontosságot azonban úgy kell megválasztnai, hogy ábrázolható legyen az inkrement. Szerencsére összeadni több biten is lehet az FPGA-ban, így nem okoz problémát nagyobb típust váalsztani, azonban az integrátor után vissza kell konvertálni 18 biten ábrázolható méretre, még ha ezzel a pontossábgól veszítünk is.
+
+\subsection{HDL kódgeneráció}
+
+Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást is beállítottuk az összes változóra, készen állunk a verilog fájlok előállítására. Ehhez szükséges a Matlab HDL Coder toolboxa. Amennyiben rendelkezünk ezzel, a HDL Workflow Advisor lesz a segítségünkre a folyamat elvégzésében.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{figures/hdl_advisor.png}
+	\caption{A HDL workflow advisor ablaka} 
+	\label{fig:hdl_advisor}
+\end{figure}
+
+Első lépésben be kell állítani, hogy miylen típusú FPGA-ra szretnénk kódot generálni, valamint be kell állítani, hogy hova készüljön el a projekt. Ezek után a szoftver még egyszer ellenőrzi, hogy a modellből lehet-e HDL kódot generálni. Ellenőrzi, hogy van-e esetleg nem támogatott blokk a modellben, van-e algebrai hurok, illetve az időzítések megfelelőek-e. Ha minden teszt sikeres volt, akkor egyben le is futtathatjuk a taskokat a projekt létrehozásáig, a többi lépésre nincsen szükség. Ezzel előáll a verilog projekt, és ha minden sikeres volt az alábbi ablak fogad minket.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{figures/hdl_report.png}
+	\caption{A folyamat végi üzenet} 
+	\label{fig:hdl_report}
+\end{figure}
+
+Itt megnézhetjük újra, hogy milyen beállításokkal készült el a projekt, illetve megtekinthetjük a kimeneti fájlokat is. A generált kód jól struktúrált, bár kevéssé olvasható. Az egyes blokok egy-egy modulként fordlnak le, melyeket a fő modul példányosít.
+
+A következő lépésben Vivadoban létre kell hozni a keretrendszert adó kódot, majd ebbe integrálva a msot készült modellt, generálhatjuk és az FPGA-ba töltendő bitstream-et.
+
+\subsection{Vivado projekt}
