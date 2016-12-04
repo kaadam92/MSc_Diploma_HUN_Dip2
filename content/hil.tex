@@ -180,7 +180,7 @@ A futtatandó modell magában foglalja a teljesítményelektronikai elemek model
 
 \subsection{A rendelkezésre álló modell}
 
-\Aref{fig:original_model}. ábrán látható a korábban elkészített modell és az egyes blokkok kapcsolata. Jó kiniduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelőáram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kiemenetként, így ezt módosítani kellett, hogy a DC áram is előálljon. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az I_{DC} terhelőáram, bemenetként a DC kört is tartalmazó modellemnek.
+\Aref{fig:original_model}. ábrán látható a korábban elkészített modell és az egyes blokkok kapcsolata. Jó kiniduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelőáram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kiemenetként, így ezt módosítani kellett, hogy a DC áram is előálljon. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az $I_{DC}$ terhelőáram, bemenetként a DC kört is tartalmazó modellemnek.
 
 
 \begin{figure}[]
@@ -190,18 +190,16 @@ A futtatandó modell magában foglalja a teljesítményelektronikai elemek model
 	\label{fig:original_model}
 \end{figure}
 
-Az I_{DC} terhelőáramot az alábbi egyenletek segítségével határozhatjuk meg:
+Az $I_{DC}$ terhelőáramot az alábbi egyenletek segítségével határozhatjuk meg:
 
 \begin{equation}
 \centering
-$$
 I_{DC}
 =
 \begin{cases}
 I_{AC}   & ha \  PWM_H = 1 \  | \  PWM_H = 0 \  \& \  I_{AC} < 0 \\
 0 & 
-\end{cases}
-$$    
+\end{cases}   
 \end{equation}
 
 A módosítások \aref{fig:igbt_model}. ábra alsó részén láthatóak. Ebből a modellből valóstja meg együttesen három darab az inverter kimeneti fokozatának modelljét. 
@@ -416,7 +414,7 @@ Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advis
 
 Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást is beállítottuk az összes változóra, készen állunk a verilog fájlok előállítására. Ehhez szükséges a Matlab HDL Coder toolboxa. Amennyiben rendelkezünk ezzel, a HDL Workflow Advisor lesz a segítségünkre a folyamat elvégzésében.
 
-\begin{figure}[H]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/hdl_advisor.png}
 	\caption{A HDL workflow advisor ablaka} 
@@ -425,7 +423,7 @@ Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást 
 
 Első lépésben be kell állítani, hogy miylen típusú FPGA-ra szretnénk kódot generálni, valamint be kell állítani, hogy hova készüljön el a projekt. Ezek után a szoftver még egyszer ellenőrzi, hogy a modellből lehet-e HDL kódot generálni. Ellenőrzi, hogy van-e esetleg nem támogatott blokk a modellben, van-e algebrai hurok, illetve az időzítések megfelelőek-e. Ha minden teszt sikeres volt, akkor egyben le is futtathatjuk a taskokat a projekt létrehozásáig, a többi lépésre nincsen szükség. Ezzel előáll a verilog projekt, és ha minden sikeres volt az alábbi ablak fogad minket.
 
-\begin{figure}[H]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/hdl_report.png}
 	\caption{A folyamat végi üzenet} 
@@ -440,12 +438,12 @@ A következő lépésben Vivadoban létre kell hozni a keretrendszert adó kódo
 
 A vivado projektben a következő feladataink vannak a modellel kapcsoaltban:
 \begin{enumerate}
-	\item{Példányosítani kell a \emph{ZTEX_HIL} blokkot}
+	\item{Példányosítani kell a ZTEX\_HIL blokkot}
 	\item{Monitorozási lehetőséget kell biztosítani}
 	\item{Az FPGA I/O portjait megfelelően be kell állítani}
 \end{enumerate}
 
-A példányosítás a \emph{top_module.v} fájlban történik. Megfelelő projekt beállításokkal, ha mindig ugyan oda generáljuk az új modellt, ehhez a részhez a továbbiakban csak akkor kell hozzányúlni, ha a ki vagy bemenetek módosulnak.
+A példányosítás a top\_module.v fájlban történik. Megfelelő projekt beállításokkal, ha mindig ugyan oda generáljuk az új modellt, ehhez a részhez a továbbiakban csak akkor kell hozzányúlni, ha a ki vagy bemenetek módosulnak.
 
 \begin{figure}[H]
 	\centering
