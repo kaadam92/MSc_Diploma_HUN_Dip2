@@ -142,12 +142,20 @@ A harmadik út - amit részletesebben megvizsgálok dolgozatomban - az FPGA alap
 
 \section{Szimulációs algoritmusok}
 
+Az áramköri szimulációk numerikus megoldása általában differenciálegyenlen rendserekre vezethetőek vissza. Az irodalom számos megoldásról említést tesz. A legtöbb esteben a modellezendő szakasz matematikai modelljét felállítjuk, egy ismert gerjesztésre való váalsz alapján, majd az így kepott modellt diszkretizáljuk.
+
+Egy álatlános folytonos idejű rendszert az alábbi egenletek reprezentálnak: 
+
 \begin{equation}
 \begin{align*}
 \underline{x}'(t) &= \underline{\underline{A}}\cdot \underline{x}(t) + \underline{\underline{B}}\cdot{}\underline{x}(t) \\[0.3em]
 \underline{y}(t) &= \underline{\underline{C}}\cdot \underline{x}(t) + \underline{\underline{D}}\cdot{}\underline{x}(t)
 \end{align*} 
 \end{equation}
+
+ahol, $\underline{x}$ az állapotváltozók vektora, az $\underline{u}$ a rendszer bemenete, $\underline{y}$ pedig a rendszer által adott váalsz.
+
+
 
 \begin{equation}
 \begin{align*}
