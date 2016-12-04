@@ -437,3 +437,21 @@ Itt megnézhetjük újra, hogy milyen beállításokkal készült el a projekt, 
 A következő lépésben Vivadoban létre kell hozni a keretrendszert adó kódot, majd ebbe integrálva a msot készült modellt, generálhatjuk és az FPGA-ba töltendő bitstream-et.
 
 \subsection{Vivado projekt}
+
+A vivado projektben a következő feladataink vannak a modellel kapcsoaltban:
+\begin{enumerate}
+	\item{Példányosítani kell a \emph{ZTEX_HIL} blokkot}
+	\item{Monitorozási lehetőséget kell biztosítani}
+	\item{Az FPGA I/O portjait megfelelően be kell állítani}
+\end{enumerate}
+
+A példányosítás a \emph{top_module.v} fájlban történik. Megfelelő projekt beállításokkal, ha mindig ugyan oda generáljuk az új modellt, ehhez a részhez a továbbiakban csak akkor kell hozzányúlni, ha a ki vagy bemenetek módosulnak.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{figures/vivado.png}
+	\caption{A Vivado környezet} 
+	\label{fig:hdl_report}
+\end{figure}
+
+A monitorozást a már több helyen bevált HiTERM program segítségével valósítottam meg. A szoftver beágyazott folyamatok megfigyelésére biztosít lehetőséget. Soros porton kommunikál az eszközzel, a megfelelő memóriacímekkről olvas periodikusan változókat, illetve megfelelő konfiguráció esetén módosítani is lehet azokat.
