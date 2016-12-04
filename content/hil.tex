@@ -127,7 +127,7 @@ Blokk RAM összesen (kb)      & 13140  \\
 Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardwarenek, a későbbi bővülésre is hagy lehetőséget. A fimware elkészítésére és fejlesztésére a Xilinx Vivado környezet biztosít lehetőséget. Ebben készült el a keretrendszer, mely a Simulinkból generált HDL fájlokat tudja fogadni, megfelelő interfészen keresztül a kártyára vezetni.
 
 
-\subsection{Szigma-Delta (\Sigma\Delta)\ átalakítók}
+\subsection{Szigma-Delta ($\Sigma{}\Delta{}$) átalakítók}
 
 Az FPGA nem rendelkezik analóg kiementekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. A szigma delta átalakító nagyon nagy vonalakban egy órajel és egy fix impulzusszélességű négyszögjel, mely vagy logikai egy értéket, vagy logikai nulla értéket vesz fel az órajel minden felfutó (vagy lefutó) élére. Az így kialakult impulzusjel kitöltési tényezője egy hosszabb mintavételi ablakot tekintve arányos a bemeneti kódszóval. Ezek után a jelet egy az órajelnél sokkal kisebb vágási frekvenciájú aluláteresztő szűrűvel feldolgozva analóg jelet kapunk. A szigma delta átalakító további odo{vagy további, vagy rendes összehasonlítás} előnye a PWM kimenethez képest, hogy a kvantálái zajt nagyfrekvenciás tartományba tolja.\cite{artofelectronics}
 
@@ -139,19 +139,23 @@ A mi esetünkben két részre bontható az átalakító. A modellben fut egy ana
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width = 0.75\textwidth]{figures/first_order_ds.png}
+	\includegraphics[width = 0.75\textwidth]{figures/first_oder_sd.png}
 	\caption{A szigma-delta átalakító} 
 	\label{fig:sigmadelta}
 \end{figure}
 
-\Aref{fig:nosie}. ábárn megfigyelhető, hogy hogyan változtajuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvenciatartományba tolja a zajt, melynek ezáltal az efektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy aluláteresztő szűrőn
-
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width = 0.75\textwidth]{figures/first_ordered_ds_2.png}
+	\includegraphics[width = \textwidth]{figures/noiseshape.png}
 	\caption{A szigma-delta átalakító} 
-	\label{fig:noise}
+	\label{fig:asd}
 \end{figure}
+
+
+
+\Aref{fig:nosie}. ábárn megfigyelhető, hogy hogyan változtajuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvenciatartományba tolja a zajt, melynek ezáltal az efektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy aluláteresztő szűrőn.
+
+
 
 Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet.
 
