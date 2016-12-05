@@ -179,6 +179,17 @@ Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az F
 
 \subsection{Kiegészítő csatlakozó}
 
+A könnyű bővítési lehetőségeket biztosítandó, a kártyán elhelyezésre került egy kiegészítő csatlakozó. Ennek segítségével később könnyedén kielégíthetőek lesznek most még nem látható igények. Az lábakon átajunk mind a $24\ V$-os, mind az $5\ V$-os tápfeszültséget, illetve a fel nem használt FPGA I/O-k vannak kivezetve. A lábak között kettőt dedikáltan I2C vonalnak használtam, itt a különbség mindössze annyi a többi lábhoz képest, hogy opconálisan beforrasztható egy felhúzó ellenállás, illetve szintén forrasztható be sosors impedancia. A csatlakozó pontos lábkiosztása \aref{fig:hil_extender}. ábrán látható.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width = \textwidth]{figures/hil_extender.png}
+	\caption{A HIL kártya kiegészítő csatlakozója} 
+	\label{fig:hil_extender}
+\end{figure}
+
+A kártya teljes kapcsolási rajza a dolgozat függelékében megtalálható.
+
 \section{Simulink modell}
 
 A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossaág volt a modellnek, hogy a DC link feszültésge egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatásást nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.

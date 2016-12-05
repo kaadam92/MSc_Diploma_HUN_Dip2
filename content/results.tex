@@ -2,7 +2,7 @@
 
 \section{Az első tesztek}
 
-Először is az implementált modell helyességét kell megvizsgálni. Eh
+Először is az implementált modell helyességét kell megvizsgálni. Ehhez vegyük szemügyre \aref{fig:cont_run}. ábrát. Láthatjuk rajta a három bejövő fázis áramát, illetve a DC feszültséget. A látottakról elmondható, hogy a görbék jellegüket tekintve helyesek, a kezdeti tranziens után állandósult állapotba kerül a rendszer. Az egyes fázisok áramai szimmetrikusak, az áramalakon, valamint a feszültséghullámoságon is megfigyelhető a várt, $50 Hz$-es hálózatból adódó $300\ Hz$-es hullámosság. A szimuláció $11\ A$-es konstans terhelés mellett készült, így jelentős $40\ V$-os DC hullámosság figyelhető meg.
 
 \begin{figure}[H]
 	\centering
@@ -11,12 +11,26 @@ Először is az implementált modell helyességét kell megvizsgálni. Eh
 	\label{fig:cont_run}
 \end{figure}
 
+\Aref{fig:meas_1}. ábrán már egy valós futás eredményét látjuk, a pitos görbe a DC feszültség. Ez a mérés nem műszerrel készült, a frekvenciaváltó valós mérése került rögzítésre a HiTerm szoftver segítésgével. Láthatjuk, hogy a jelelek középértéke mint egy $30\ V$-al kisebb, ez a különbség a hálózat csúcsfeszültségének értékéből adódik. Szintén láthatjuk, hogy a kimenő áram csúcsértéke $16\ A$, melynek effektív értéke $\frac{16}{sqrt{s}} \approx 11\ A$, így a szimuláció és a mérés eredménye összehasonlítható, hiszen a szimulált eszköz valódi példányán készült, hasonló futási paraméterek mellett. Láthatjuk, hogy a DC feszültség hullámossága ebben az esetben csak $30\ V$, ami jelentős eltérésnek tűnhet a szimulációval szemben, ennek azonban van magyarázata. A DC-link kondenzátor két sorba kötött B43544B5277M002 típusú elektrolit kondenzátor. Az alumínium-elektrolit kondenzátoroknak jellemzően nagy szórásuk van kapacitás tekintetében, az adatlapból leolvashatjuk, hgy ennek a konrét példánynak $\plusminus 20\%$, tehát a névleges érétktől valóban jelentősen eltréhet a valós kapacitás, aminek közveteln hatása van a mért DC hullámosságra.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = \textwidth]{figures/50Hz_400V_LD12A_10k.jpeg}
+	\caption{Egy valós mérés eredménye} 
+	\label{fig:meas_1}
+\end{figure}
+
+\Aref{fig:hil_desk}. ábrán a teszteket megvalósító hardvert láthatjuk működés közben. Jól megfigyelhető, hogy bár nem az aktuális tervek szerinti hadrvert láthatjuk, számos módosítás elvégzésre került rajta, hogy megfelejen a követelményeknek, illetve hogy ki lehessen próbálni a módosítások hatását.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width = \textwidth]{figures/hil_table.jpg}
 	\caption{Az összeállított HIL deszkamodell} 
 	\label{fig:hil_desk}
 \end{figure}
+
+\Aref{fig:office_testbench}. ábárán látható az úgynevezett ,,office testbench''
+ azaz az irodai tesztpadunk. Erre fel van szerelve két egymásnak fordított $1,1\ kW$-os motor, az egyiket a Hyundai által fejlesztett Frame 1-es frekvenciaváltó hajtja, a másikat egy PROCON gyártmányú. Az eszköz segítségével könnyedén ki tudjuk próbálni a szoftver módosításait a nagyáramú laboratórium segítsége nélkül, tetszőleges terhelés mellett. 
 
 \begin{figure}[H]
 	\centering
