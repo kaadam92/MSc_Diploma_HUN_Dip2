@@ -4,11 +4,13 @@ Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai esz
 
 \section{Hardware felépítése}
 
-A HIL szimulátor hardware nem más, mint egy interface elektronika a vezérlő hardware-ek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystem blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása.
+A HIL szimulátor hardver nem más, mint egy interfész elektronika a vezérlő hardverek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérlést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystem blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása.
+
+/todo[inline]{Lehetne részletezni talán}
 
 \subsection{CCB és MCB csatlakozó}
 \todo[inline]{Meg kell rendesen foglalmani a kis mondandóm}
-A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART-on valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{table:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
+A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART vonalon valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{table:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
 
 \begin{table}[]
 \centering
@@ -65,16 +67,16 @@ UdcP           & Analog       & Bemenet      &                                 \
 UdcN           & Analog       & Bemenet      &                                 \\ \hline
 \end{tabular}
 \caption{A CCB jelei}
-\label{ccbsignals}
+\label{tab:ccbsignals}
 \end{table}
 
-Ezek azok a jelek, amiket a HIL-nek vagy szimulálnia, vagy pedig fogadnia kell. Ezen felül található a csatlakozón még két \emph{5V\_Loopback} nevű láb, ezt a táblázatben nem jelenítettem meg. Ennek a funkciója az, hogy létre lehet hozni a PIB-en olyan áramköri részeket, melyek az $5\ V$-os táplálást csak a CCB-n keresztül kapják meg, így nem indulnak el csatlakoztatott kártya nélkül.
+Ezek azok a jelek, amiket a HIL-nek vagy szimulálnia, vagy pedig fogadnia kell. Ezen felül található a csatlakozón még két \emph{5V\_Loopback} nevű láb, ezt a táblázatban nem szerepeltettem. Ennek az a funkciója, hogy létre lehet hozni a PIB-en olyan áramköri részeket, melyek az $5\ V$-os táplálást csak a CCB-n keresztül kapják meg, így nem indulnak el csatlakoztatott kártya nélkül.
 
-A digitális jelek esetében a feladat egyszerű, csak a CCB és az FPGA közti jelszint különbséget kell megoldani. Ebben egy \emph{74LVC8T245PW} típusú level-shifter lesz segítségünkra. A CCB a jelekt $5\ V$-os tartományban adja ki, illetve fogadja, az FPGA maximális kiementi feszültésge $3,3\ V$, és nem is állnak rendelkezésre nagyobb feszültséget toleráló lábak. A kisebb feszültségre való átalakításra lehetséges megoldás a feszültségosztó is, de a nagysebességű jelek dinamikájának megőrzése érdekében inkább itt is a level-shiftert választottam. A lassabb jelek esetében maradtam a feszültségosztóval való megoldásnál.
+A digitális jelek átvitele esetében a feladat egyszerű, csak a CCB és az FPGA közti jelszint különbséget kell megoldani. Ebben egy \emph{74LVC8T245PW} típusú level-shifter lesz segítségünkre. A CCB a jeleket $5\ V$-os tartományban adja ki, illetve fogadja, az FPGA maximális kimeneti feszültsége $3,3\ V$, és nem is állnak rendelkezésre nagyobb feszültséget toleráló lábak. A kisebb feszültségre való átalakításra lehetséges megoldás a feszültség osztó is, de a nagy sebességű jelek dinamikájának megőrzése érdekében inkább itt is a level-shiftert választottam. A lassabb jelek esetében maradtam a feszültség osztóval való megoldásnál.
 
-Analóg jeleket tekintve csak bemenet találhat óa CCB-n. Ezen jelek előállítását Sigma-Delta átalakítók segítségével oldottam meg, melyről részletesebben később lesz szó.
+Analóg jeleket tekintve csak bemenet található a CCB-n. Ezen jelek előállítását Sigma-Delta átalakítók segítségével oldottam meg, melyről részletesebben később lesz szó.
 
-A fent említett jeleken kívül a HIL-en elhelyeésre került az ULINK és az St-Link debuggerek csatlakozója is, a fejlesztés kényelmesebbé tételének érdekében. A CCB-re a JTAG jelei egy külön flat-flex kábel segítségével csatlakoznak. Ennek a mechanikai teherbíása igen alacsony, így pedig nem kell egy külön kártyára csatlakoztatni, kockáztatva ezzel az elmozdulást, kontakthibát vagy vezetékszakadást.
+A fent említett jeleken kívül a HIL-en elhelyezésre került az ULINK és az St-Link debuggerek csatlakozója is, a fejlesztés kényelmesebbé tételének érdekében. A CCB-re a JTAG jelei egy külön flat-flex kábel segítségével csatlakoznak. Ennek a mechanikai teherbírása igen alacsony, így pedig nem kell egy külön kártyára csatlakoztatni, kockáztatva ezzel az elmozdulást, kontakthibát vagy vezeték szakadást.
 
 \begin{figure}[!ht]
 	\centering
@@ -84,11 +86,11 @@ A fent említett jeleken kívül a HIL-en elhelyeésre került az ULINK és az S
 \end{figure}
 
 \subsection{Tápegység}
-A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technologies \emph{LT3845AEFE#PBF} szinkron buck tápegység vezérlő IC és a hozzá tartozó külső apparátus állítja aelő az $5 V$-os tápfeszültséget mind az FPGA mind pedig a CCB számára. A tápegység maximálisan $6 A$ terhelhetőségű, amely előser soknak tűnhet, de az FPGA fogyasztását jelentpsen befolyásolja a benne található firmware, így elképzelhető az kapacitás teljes felhasználása is, kis teljesítmény esetén edig hatékony tud maradni az ún. \emph{Burst mode} működési mód segítségével.
+A kártya $24 V$-os tápfeszültségre lett tervezve. Ebből egy Linear Technologies \emph{LT3845AEFE#PBF} típusú szinkron buck tápegység vezérlő IC és a hozzá tartozó külső apparátus állítja elő az $5 V$-os táp feszültséget mind az FPGA mind pedig a CCB számára. A táp egység maximálisan $6 A$ terhelhetőségű, amely soknak tűnhet, de az FPGA fogyasztását jelentősen befolyásolja a benne található szoftver bonyolultsága, így elképzelhető a kapacitás teljes felhasználása is, kis teljesítmény esetén pedig hatékony tud maradni az úgynevezett \emph{Burst mode} működési mód segítségével.
 
 \subsection{ZTEX kártya}
 
-Egy iylen teszt és fejlesztési eszköz fejlesztése során az egyik legfontosabb szempont a modularitás. Nem láthatjuk előre feltétlenül, hogy a későbbiekben mire lesz szükség. Az FPGA önmagában biztosít modularitást, hiszen cserélhető benne a hardware, jelen esetben a megvalósított matematikai modell. Ezen felül egy közel 500 lábbal rendelkező BGA tokos FPGA-hoz a nyáktervezés sem triviális feladat. A megfelelő lábak kivezetéséhez legalább 6-8 rétegre van szükség, és nagyon sok hibalehetőséget tartogat magában. Ezek miatt egy FPGA modul alkalmazása mellett döntöttünk. Bár az elérhető GPIO lábak mennyisége így korlátoztt, az FPGA-t működtető áramkör garantáltan működőképes, illetve a saját tervezésű elektornika bonyolultsága is jelentősen csökken.
+Egy ilyen teszt és fejlesztési eszköz készítése során az egyik legfontosabb szempont a modularitás. Nem láthatjuk előre feltétlenül, hogy a későbbiekben mire lesz szükség. Az FPGA önmagában biztosít modularitást, hiszen cserélhető benne a hardver, jelen esetben a megvalósított matematikai modell. Ezen felül egy közel 500 lábbal rendelkező BGA tokos FPGA-hoz a nyák tervezés sem triviális feladat. A megfelelő lábak kivezetéséhez legalább 6-8 rétegre van szükség, és nagyon sok hibalehetőséget tartogat magában. Ezek miatt egy FPGA modul alkalmazása mellett döntöttünk. Bár az elérhető GPIO lábak mennyisége így korlátozott, az FPGA-t működtető áramkör garantáltan üzemképes, illetve a saját tervezésű elektronika bonyolultsága is jelentősen csökken.
 
 \begin{figure}[!ht]
 	\centering
@@ -97,8 +99,8 @@ Egy iylen teszt és fejlesztési eszköz fejlesztése során az egyik legfontosa
 	\label{fig:ztex}
 \end{figure}
 
-\Aref{fig:ztex} ábrán látható ZTEX panel mellett tettem le a voksom. A kártyáról kivezetésre kerültek a JTAG interfész jelei is, azonban az ehhez az FPGA-hoz való Xilinx debugger nem áll rendelkezésre. A ZTEX kártyán azonban egy Cypress mikorovezérlő segítségével, \emph{libusb} driver segítségével betölthető a bitstream mind a RAM-ba, ideiglenes teszthez, mind pedig a FLASH-be, melyből az FPGA minden indítás során be tudja olvadni azt.
-
+\Aref{fig:ztex} ábrán látható ZTEX panel mellett tettem le a voksom. A kártyáról kivezetésre kerültek a JTAG interfész jelei is, azonban az ehhez az FPGA-hoz való Xilinx debugger nem áll rendelkezésre. A ZTEX kártyán azonban egy Cypress mikrovezérlő segítségével, \emph{libusb} driver segítségével betölthető a bitstream mind a RAM-ba, ideiglenes teszthez, mind pedig a FLASH-be, melyből az FPGA minden indítás során be tudja olvasni azt.
+/todo[inline]{Itt is lehet még részletezni a betöltés folyamatát}
 
 \begin{figure}[!ht]
 	\centering
@@ -107,7 +109,7 @@ Egy iylen teszt és fejlesztési eszköz fejlesztése során az egyik legfontosa
 	\label{fig:ztex_block}
 \end{figure}
 
-Ezen felül a rajta található Xilinx Artix 7 FPGA megfelelő hűtését is biztosítja a panel. Az FPGA főbb datai \aref{table:artix7spec} táblázatban láthatóak. Ez az eszköz a Xilinx jelegelg kereskedelemi forgalomban kapható egyik zászlóshajója, amit bizonyít is a ZTEX panel 500 Eurós vételára.
+Ezen felül a rajta található Xilinx Artix 7 FPGA megfelelő hűtését is biztosítja a panel. Az FPGA főbb adatai \aref{table:artix7spec} táblázatban láthatóak. Ez az eszköz a Xilinx jelenleg kereskedelmei forgalomban kapható egyik zászlós hajója, amit bizonyít is a ZTEX panel 500 Eurós vételára.
 
 \begin{table}[]
 \centering
@@ -127,18 +129,18 @@ Blokk RAM összesen (kb)      & 13140  \\
 \label{artix7spec}    
 \end{table}
 
-Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardwarenek, a későbbi bővülésre is hagy lehetőséget. A fimware elkészítésére és fejlesztésére a Xilinx Vivado környezet biztosít lehetőséget. Ebben készült el a keretrendszer, mely a Simulinkból generált HDL fájlokat tudja fogadni, megfelelő interfészen keresztül a kártyára vezetni.
+Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardvernek, a későbbi bővülésre is hagy lehetőséget. A frimware elkészítésére és fejlesztésére a Xilinx Vivado környezet biztosít lehetőséget. Ebben készült el a keret rendszer, mely a Simulink-ból generált HDL fájlokat tudja fogadni, megfelelő interfészen keresztül a kártyára vezetni.
 
 
 \subsection{Szigma-Delta ($\Sigma{}\Delta{}$) átalakítók}
 
-Az FPGA nem rendelkezik analóg kiementekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben relik a szimulátor lényege, a vezérlő elektronika szmszögéből nincsen különbség a valós hardware és a szimulátor között. A szigma delta átalakító nagyon nagy vonalakban egy órajel és egy fix impulzusszélességű négyszögjel, mely vagy logikai egy értéket, vagy logikai nulla értéket vesz fel az órajel minden felfutó (vagy lefutó) élére. Az így kialakult impulzusjel kitöltési tényezője egy hosszabb mintavételi ablakot tekintve arányos a bemeneti kódszóval. Ezek után a jelet egy az órajelnél sokkal kisebb vágási frekvenciájú aluláteresztő szűrűvel feldolgozva analóg jelet kapunk. A szigma delta átalakító további odo{vagy további, vagy rendes összehasonlítás} előnye a PWM kimenethez képest, hogy a kvantálái zajt nagyfrekvenciás tartományba tolja.\cite{artofelectronics}
+Az FPGA nem rendelkezik analóg kimentekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben rejlik a szimulátor lényege, a vezérlő elektronika szemszögéből nincsen különbség a valós hardver és a szimulátor között. A szigma delta átalakító nagyon nagy vonalakban egy órajel és egy fix impulzus szélességű négyszög jel, mely vagy logikai egy értéket, vagy logikai nulla értéket vesz fel az órajel minden felfutó (vagy lefutó) élére. Az így kialakult impulzus-sor kitöltési tényezője egy hosszabb mintavételi ablakot tekintve arányos a bemeneti kódszóval. Ezek után a jelet egy az órajelnél sokkal kisebb vágási frekvenciájú alul áteresztő szűrűvel feldolgozva analóg jelet kapunk. A szigma delta átalakító egyik előnye a PWM kimenethez képest, hogy a kvantálási zajt nagyfrekvenciás tartományba tolja. \cite{artofelectronics}
 
 \todo[inline]{PWM vs sigma delta spektrum}
 
 Igen félrevezető névvel szokás "1 bites DA" átalakítónak is nevezni. A kifejezés egyszerűséget és alacsony teljesítményt sugall, ennek ellenére a megoldás rendkívül lineáris és nagy felbontású eredményt ad, így elterjedten használják pl. audio eszközökben is.
 
-A mi esetünkben két részre bontható az átalakító. A modellben fut egy analógjelből digitális jelet létrehozó szigma-delta átalakító, majd az így kiadott digitális jelet szűrjük már az FPGA-n kívül egy aluláteresztő szűrűvel. \Aref{fig:sigmadelta} ábra szemlélteti az átalakító működését. A bejövő analalóg jelből levonjuk a hibajelet, majd egy komparátor összehasonlítja egy referenciával. Amennyiben nagyobb a bejövő jel, a kimenet logikai "1" értéket vesz fel, ha kisebb, logikai "0"-t. Ezt a jelet, egy 1-bites DAC-on keresztül vezetve akkumuláljuk, így kialakítva a hibajelet. 
+A mi esetünkben két részre bontható az átalakító. A modellben fut egy analóg jelből digitális jelet létrehozó szigma-delta átalakító, majd az így kiadott digitális jelet szűrjük már az FPGA-n kívül egy alul áteresztő szűrűvel. \Aref{fig:sigmadelta} ábra szemlélteti az átalakító működését. A bejövő analóg jelből levonjuk a hiba jelet, majd egy komparátor összehasonlítja egy referenciával. Amennyiben nagyobb a bejövő jel, a kimenet logikai "1" értéket vesz fel, ha kisebb, logikai "0"-t. Ezt a jelet, egy 1-bites DAC-on keresztül vezetve akkumuláljuk, így kialakítva a hiba jelet. 
 
 \begin{figure}[!h]
 	\centering
@@ -148,7 +150,7 @@ A mi esetünkben két részre bontható az átalakító. A modellben fut egy ana
 \end{figure}
 
 
-\Aref{fig:nosie}. ábárn megfigyelhető, hogy hogyan változtajuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvenciatartományba tolja a zajt, melynek ezáltal az efektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy aluláteresztő szűrőn.
+\Aref{fig:nosie}. ábrán megfigyelhető, hogy hogyan változtatjuk meg a zaj spektrumát a szigma-delta átalakítás során. A $k$-szeres túlmintavételezés a zaj spektrumát elteríti a Nyquist frekvencia $k$-szeres tartományában, amivel már jelentős SNR növekedés érhető el. Ezután azonban a zajformázás még magasabb frekvencia tartományba tolja a zajt, melynek ezáltal az effektív értéke is növekszik, de ez nem probléma, mert a jel úgy is át fog haladni egy alul áteresztő szűrőn.
 
 \begin{figure}[!h]
 	\centering
@@ -157,7 +159,7 @@ A mi esetünkben két részre bontható az átalakító. A modellben fut egy ana
 	\label{fig:asd}
 \end{figure}
 
-Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kiemeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet.
+Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az FPGA kimeneti bankjainak feszültsége maximum $3,3\ V$, ezért a szűrés után erősítésre is szükség lehet.
 
 \begin{figure}[!h]
 	\centering
@@ -166,7 +168,7 @@ Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az F
 	\label{fig:lowpass}
 \end{figure}
 
-\Aref{fig:lowpass} ábrán látható aluláteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatalkozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós enelktronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez a zavar nem jelentős, így a mérés negatív jelét földre kötjük.
+\Aref{fig:lowpass} ábrán látható alul áteresztő szűrő kimenet már közvetlenül a CCB analóg bemenetére csatlakozik. A CCB analóg mérései differenciálisak a valóságban, mivel a valós elektronikában sokkal nagyobb zaj éri a rendszert. A modellen azonban ez a zavar nem jelentős, így a mérés negatív jelét földre kötöttem.
 
 \begin{figure}[!h]
 	\centering
@@ -175,11 +177,11 @@ Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az F
 	\label{fig:lowpass_sim}
 \end{figure}
 
-\Aref{fig:lowpass_sim}. ábrán látható a szűrő átvitelének szimulációja. Két töréspont látható a Bode-diagrammon $10\ Hz$ és $10\ kHz$ frekvenciánál. A szűrő méretezésénél figyelembe kell venni a kimeneti jelek sávszélességét, ami a mi esteünkben $1\ kHz$ alatt van, illetve a kiementei négyszögjel frekvenciáját. Ez $18\ MHz$, így biztosak lehetünk benne, hogy a kimeneti jel az alkalmazás igényeinek megfelelő.
+\Aref{fig:lowpass_sim}. ábrán látható a szűrő átvitelének szimulációja. Két töréspont látható a Bode-diagrammon $10\ Hz$ és $10\ kHz$ frekvenciánál. A szűrő méretezésénél figyelembe kell venni a kimeneti jelek sávszélességét, ami a mi esetünkben $1\ kHz$ alatt van, illetve a kimeneti négyszög jel frekvenciáját. Ez $18\ MHz$, így biztosak lehetünk benne, hogy a kimeneti jel az alkalmazás igényeinek megfelelő.
 
 \subsection{Kiegészítő csatlakozó}
 
-A könnyű bővítési lehetőségeket biztosítandó, a kártyán elhelyezésre került egy kiegészítő csatlakozó. Ennek segítségével később könnyedén kielégíthetőek lesznek most még nem látható igények. Az lábakon átajunk mind a $24\ V$-os, mind az $5\ V$-os tápfeszültséget, illetve a fel nem használt FPGA I/O-k vannak kivezetve. A lábak között kettőt dedikáltan I2C vonalnak használtam, itt a különbség mindössze annyi a többi lábhoz képest, hogy opconálisan beforrasztható egy felhúzó ellenállás, illetve szintén forrasztható be sosors impedancia. A csatlakozó pontos lábkiosztása \aref{fig:hil_extender}. ábrán látható.
+A könnyű bővítési lehetőségeket biztosítandó, a kártyán elhelyezésre került egy kiegészítő csatlakozó. Ennek segítségével később könnyedén kielégíthetőek lesznek most még nem látható igények. Az lábakon elérhető mind a $24\ V$-os, mind az $5\ V$-os táp feszültség, illetve a fel nem használt FPGA I/O-k vannak kivezetve. A lábak között kettőt dedikáltan I2C vonalnak használtam fel, itt a különbség mindössze annyi a többi lábhoz képest, hogy opcionálisan beforrasztható egy felhúzó ellenállás, illetve szintén forrasztható be soros impedancia. A csatlakozó pontos láb kiosztása \aref{fig:hil_extender}. ábrán látható.
 
 \begin{figure}[!h]
 	\centering
@@ -192,11 +194,11 @@ A kártya teljes kapcsolási rajza a dolgozat függelékében megtalálható.
 
 \section{Simulink modell}
 
-A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossaág volt a modellnek, hogy a DC link feszültésge egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatásást nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
+A futtatandó modell magában foglalja a teljesítmény elektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossága volt azonban, hogy a DC-link feszültsége egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatását nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
 
 \subsection{A rendelkezésre álló modell}
 
-\Aref{fig:original_model}. ábrán látható a korábban elkészített modell és az egyes blokkok kapcsolata. Jó kiniduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelőáram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kiemenetként, így ezt módosítani kellett, hogy a DC áram is előálljon. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az $I_{DC}$ terhelőáram, bemenetként a DC kört is tartalmazó modellemnek.
+\Aref{fig:original_model}. ábrán látható a korábban elkészített modell és az egyes blokkok kapcsolata. Jó kiinduló alapot biztosított, jól megfigyelhető rajta a rendszer működése. Ez a modell bemenetként tekint a DC feszültségre, így az én bemeneti modellemet ezen kívül helyeztem el. A terhelés a bemeneti modellben DC terhelő áram formájában jelentkezik, így ezt a jelet elő kellett még állítani. A rendelkezésre álló félhíd modell csak az AC áramot állítja elő kimenetként, így ezt módosítani kellett, hogy a DC áram is megkapható legyen. Ezek után a három félhíd áramát összegezve felhasználhatóvá vált az $I_{DC}$ terhelő áram, bemenetként a DC kört is tartalmazó modellemnek.
 
 
 \begin{figure}[]
@@ -206,7 +208,7 @@ A futtatandó modell magában foglalja a teljesítményelektronikai elemek model
 	\label{fig:original_model}
 \end{figure}
 
-Az $I_{DC}$ terhelőáramot az alábbi egyenletek segítségével határozhatjuk meg:
+Az $I_{DC}$ terhelő áramot az alábbi egyenletek segítségével határozhatjuk meg:
 
 \begin{equation}
 \centering
@@ -239,7 +241,7 @@ A módosítások \aref{fig:igbt_model}. ábra alsó részén láthatóak. Ebből
 	\label{fig:cont_input_model}
 \end{figure}
 
-A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blokkal ami a felsorolt hiányosságokat orvosolja. Az elkészítendő modellnek tartalmaznia kell tehát egy háromfázisú hálózatmodellt, a diódás hidat, a bemeneti DC folytót, illetve a DC link kondenzátort. A modellezendő főáramkori részt \aref{fig:input_marked} ábrán jelöltem. 
+A feladat tehát az, hogy a korábbi modellt egészítsem ki egy olyan blokkal ami a felsorolt hiányosságokat orvosolja. Az elkészítendő modellnek tartalmaznia kell tehát egy három fázisú hálózat modellt, a diódás hidat, a bemeneti DC fojtót, illetve a DC link kondenzátort. A modellezendő főáramkőri részt \aref{fig:input_marked} ábrán jelöltem. 
 
 \begin{figure}[H!]
 	\centering
@@ -248,13 +250,15 @@ A feladat tehát az volt, hogy a korábbi modellt egészítsem ki egy olyan blok
 	\label{fig:input_marked}
 \end{figure}
 
-Az első lépés a hálózat modellezése. Ehhez szükségünk van egy szinuszos feszültség előállítására. Mivel a hálózatot egy soros RL modell adja, melynek átviteli függvénye az alábbi. 
+Az első lépés a hálózat modellezése. Ehhez szükségünk van egy szinuszos feszültség előállítására. Mivel a hálózatot egy soros RL modell adja, melynek átviteli függvénye az alábbi.
+
+\todo[inline]{Ez így nagyon nem jó}
 
 \begin{equation}
 I(s) = \frac{U(s)}{R+Ls}
 \end{equation}
 
-Mivel a három fázis induktivitása nem független egymástól, ezért az egyes fázisok egymásra hatását is fogyelembe kell venni a szimuláció során. Ez jelentős számításbeli töbleetet jelenteni, a modell struktúráját is bonyolítaná, ezért a fázisokat inkább szétcsatoljuk és az $x,y$ koordinátarendszerben ábrázoljuk őket. Emiatt a szinusz generátor modulban máregyből egy sinust és cosinust hozunk léra, azaz két szinusz hullámot, $90°$ fáziskülönbséggel. Ezt a két jelet vezetjük át egy-egy R-L blokkon megkapva így a hálózati áramokat. Azért, hogy visszakapjuk a háromfázisú mennyiségeket, inverz Clarke transzoformációt alkalmazunk a két jelent, ígyelőáll a három fázis árama, mely a diódás híd bemenetéül szolgál.
+Mivel a három fázis induktivitása nem független egymástól, ezért az egyes fázisok egymásra hatását is figyelembe kell venni a szimuláció során. Ez jelentős számításbeli többletet jelenteni, a modell struktúráját is bonyolítaná, ezért a fázisokat inkább szétcsatoljuk és az $x,y$ koordináta-rendszerben ábrázoljuk őket. Emiatt a szinusz generátor modulban már egyből egy szinuszt és koszinuszt hozunk létre, azaz két szinusz hullámot, $90°$ fáziskülönbséggel. Ezt a két jelet vezetjük át egy-egy R-L blokkon megkapva így a hálózati áramokat. Azért, hogy visszakapjuk a három fázisú mennyiségeket, inverz Clarke transzformációt alkalmazunk a két jelent, így előáll a három fázis árama, mely a diódás híd bemenetéül szolgál.
 
 \begin{equation}
 \centering
@@ -296,13 +300,23 @@ Mivel a három fázis induktivitása nem független egymástól, ezért az egyes
 \end{bmatrix}
 \end{equation}
 
-A Clarke transzformáció arra szolgál, hogy egyszerűsítsük a háromfázisú rendszerekben elvégzendő számításokat, mivel a három jellemző mennyiséget csupán kettővel reprezentálja. További előnye, hogy a nulla sorrendű komponensek a számítások során kiesnek, amire jelen esetben csak akkor lenne szükségünk, ha földzárlatot is kívánnánk szimulálni.
+A Clarke transzformáció arra szolgál, hogy egyszerűsítsük a három fázisú rendszerekben elvégzendő számításokat, mivel a három jellemző mennyiséget csupán kettővel reprezentálja. További előnye, hogy a nulla sorrendű komponensek a számítások során kiesnek, amire jelen esetben csak akkor lenne szükségünk, ha föld zárlatot is kívánnánk szimulálni.
 
-A didódás modell nagyon leegyszerűsített, csak azon üzemállapotát reprezántálja a 3 fázisú 2 utas, 6 ütemű egyenirányítónak, amikor két dióda vezet benne. Ezt pedig úgy valósítjuk meg, hogy mind a három fázis negatív tatományát levágjuk, ezek után pedig az áramok összegezhetővé válnak, így előállítva az $I_{rect}$ egyenirányított áramot. A diódákon eső feszültséget pedig úgy állítjuk elő, hogy ahhoz a diódához, amelyik éppen vezet, hozzárendeljük az $U_rect$ egyenirányított feszültséget. A hálózatra való visszahatás kiszámításához azonban az így kapott háromfázisú mennyiséget vissza kell alakítanunk $x,y$ tartomány beli mennyiségekké, erre szolgál a Clark traszformáció.
+A diódás modell nagyon leegyszerűsített, csak azon üzem állapotát reprezentálja a 3 fázisú 2 utas, 6 ütemű egyenirányítónak, amikor két dióda vezet benne. Ezt pedig úgy valósítjuk meg, hogy mind a három fázis negatív tartományát levágjuk, ezek után pedig az áramok összegezhetővé válnak, így előállítva az $I_{rect}$ egyenirányított áramot. A diódákon eső feszültséget pedig úgy állítjuk elő, hogy ahhoz a diódához, amelyik éppen vezet, hozzárendeljük az $U_rect$ egyenirányított feszültséget. A hálózatra való visszahatás kiszámításához azonban az így kapott három fázisú mennyiséget vissza kell alakítanunk $x,y$ tartomány-beli mennyiségekké, erre szolgál a Clark transzformáció.
 
-Ezen a ponton két problémába is ütközünk: a didás hídnak nincs olyan állapota ,hogy egyik dióda sem vezet, emiatt a DC kondenzátorunk a végelenségig töltődik. A jövőben tervezem a modell további finomításást, ehhez egy állapotgépet kell majd megvalósítani, a modell demonstrációs jellegére való tekintettel azonban most mást megoldást válaszottam. Empirikus úton kiderül, hogy a kondenzátort minimum $350\ mA$-el terhelni kell, hogy ne inegrálódjon el, hanem stabilizálódjon az értéke.
+Ezen a ponton két problémába is ütközünk: a diódás hídnak nincs olyan állapota, hogy egyik dióda sem vezet, emiatt a DC kondenzátorunk a végetlenségig töltődik. A jövőben tervezem a modell további finomítását, ehhez egy állapot gépet kell majd megvalósítani, a modell demonstrációs jellegére való tekintettel azonban most mást megoldást választottam. Empirikus úton kiderül, hogy a kondenzátort minimum $350\ mA$-el terhelni kell, hogy ne integrálódjon el, hanem stabilizálódjon az értéke.
 
-A msáik probléma abból adódik, hogy DC fojtó modelljének feszültség bementere van szüksége, és áram kimenetet ad, a diódás hídnak pedig áram kimenete van. Más struktúrájú modellel lehetséges így is megvalósítani a szimulációt, azonban egyszerűbb szétválasztani ezeket az állapotávltozókat egy virtuális RC-tag bevezetésével. Ennek segítségével az egyenirányító és a fojtó között is megjelenik a modellben egy potenciál. Az RC-tag paramétereit úgy választjuk meg, hogy az a modell valós működésést ne befolyásolja. Úgy is tekinthetünk erre a tagra, mint egy PI szabályzóra, mely az induktivitáson eső feszültséget igyekszik $0$-ra szabályozni, felvéve a DC-link kondenzátor feszültségét.
+A másik probléma abból adódik, hogy DC fojtó modelljének feszültség bemenetre van szüksége, és áram kimenetet ad, a diódás hídnak pedig áram kimenete van. Más struktúrájú modellel lehetséges így is megvalósítani a szimulációt, azonban egyszerűbb szétválasztani ezeket az állapot változókat egy virtuális RC-tag bevezetésével. Ennek segítségével az egyenirányító és a fojtó között is megjelenik a modellben egy potenciál. Az RC-tag paramétereit úgy választjuk meg, hogy az a modell valós működését ne befolyásolja. Úgy is tekinthetünk erre a tagra, mint egy PI szabályzóra, mely az induktivitáson eső feszültséget igyekszik $0$-ra szabályozni, felvéve a DC-link kondenzátor feszültségét.
+
+\begin{equation}
+\frac{1}{RC} \ll f_{sim}
+\end{equation}
+
+\begin{equation}
+\frac{1}{\sqrt{LC}} = R
+\end{equation}
+
+\todo[inline]{Ez nem így van, csak placeholder}
 
 \begin{figure}[H!]
 	\centering
@@ -311,9 +325,9 @@ A msáik probléma abból adódik, hogy DC fojtó modelljének feszültség beme
 	\label{fig:virtualRC}
 \end{figure}
 
-Ez így kiszámolt áramból kivonva a terhelés áramát meg kapjuk a DC kondenzátort töltő áramot.
+Az így kiszámolt áramból kivonva a terhelés áramát meg kapjuk a DC kondenzátort töltő áramot.
 
-Az így kialakult modell paraméterei \aref{tab:parameters}. táblázatban láthatóak. A DC fojtó induktivitását úgy kell érteni, hogy a valós rendszerben a negatív és a pozitív sínen is van egy-egy fojtó, azonban a modellben ez a kettő egyesítve van.
+A fent leírtak alapján kialakult modell paraméterei \aref{tab:parameters}. táblázatban láthatóak. A DC fojtó induktivitását úgy kell érteni, hogy a valós rendszerben a negatív és a pozitív sínen is van egy-egy fojtó, azonban a modellben ez a kettő egyesítésre került.
 
 \begin{table}[H]
 \centering
@@ -331,13 +345,13 @@ DC link kondenzátor kapacitása & $270\ \mu{}F $
 \begin{figure}[H]
 	\centering
 	\includegraphics[width = \textwidth]{figures/continous_testrun_1.png}
-	\caption{A frekvenciaváltó modellezett szakasza} 
+	\caption{A modell által szimulált eredmények} 
 	\label{fig:cont_run}
 \end{figure}
 
 \subsection{A DC fojtó szerepe}
 
-A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojtót alkalmazni. Enélkül a DC kondenzátor, mint kis impedanciás terhelés jelenne meg a hálózat felé. Ha felteszünk egy ipari környezetben szokásos $1,6\ MVA$-s hálózatot, egyértelművé válik, hogy a hálózatból nagyságrendekkel nagyobb áramot ki tudunk venni, mint a frekvenciaváltó üzemi érétkei, ebből adódóan a kondenzátor minden kommutációnál óriási áramtüskékkel töltődne. Az induktivitás ezeket a tüskéket simítja el, csükkentve a DC kondenzátort érő áramhullámosságot és a feszültséghullámosságot is. \aref{fig:chokenochoke}. ábrán látható egy DC folytós és egy anélküli simuláció eredménye. Látható, hogy a folytóval ellátott esetben jelentősen kisebb a DC hullámosság, valamint az áram jelalakja is sokkal simább.
+A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojtót alkalmazni. Enélkül a DC kondenzátor, mint kis impedanciás terhelés jelenne meg a hálózat felé. Ha felteszünk egy ipari környezetben szokásos $1,6\ MVA$-s hálózatot, egyértelművé válik, hogy a hálózatból nagyságrendekkel nagyobb áramot ki tudunk venni, mint a frekvenciaváltó üzemi értékei, ebből adódóan a kondenzátor minden kommutációnál óriási áram tüskékkel töltődne. Az induktivitás ezeket a tüskéket simítja el, csökkentve a DC kondenzátort érő áram hullámosságot és a feszültség hullámosságot is. \Aref{fig:chokenochoke}. ábrán látható egy DC fojtóval ellátott és egy anélküli szimuláció eredménye. Látható, hogy a fojtóval ellátott esetben jelentősen kisebb a DC hullámosság, valamint az áram jelalakja is sokkal simább.
 
 \begin{figure}[H!]
 	\centering
@@ -350,7 +364,7 @@ A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojt
 
 \subsection{Áttérés diszrét időre}
 
-Az eddig mevalósított hálózatmodell folytonos idejű, Laplace tartományban ábárzolt egyenletekkel. Az FPGA, mint minden digitális rendszer azonban diszkrét időben fogja ezeket megoldani. Emiatt a modellt át kell traszformálni \emph{z} tartományba. Az integrátor matematikailag az alábbi alaknak felel meg:
+Az eddig megvalósított hálózat modell folytonos idejű, Laplace tartományban ábrázolt egyenletekkel. Az FPGA, mint minden digitális rendszer azonban diszkrét időben fogja ezeket megoldani. Emiatt a modellt át kell transzformálni \emph{z} tartományba. Az integrátor matematikailag az alábbi alaknak felel meg:
 
 \begin{equation}
 \centering
@@ -372,9 +386,9 @@ Tehát az összes integrátor blokkon el kell végezni a fenti átalakítást.
 
 \subsection{Fixpontos ábárzolás}
 
-Az FPGA-ban hatékonyan csak fixpontos aritmetika valósítható meg, így a most lebegőpontos változóinkat át kell alakítanunk fixpontosra. Ez könnyen megoldható, hiszen az egyes változók értéktartománya előre ismert, pl tudjuk, hogy a DC feszültség biztosan kisebb, mint $U_{DC}=1000\ V$.
+Az FPGA-ban hatékonyan csak fixpontos aritmetika valósítható meg, így a most lebegőpontos változóinkat át kell alakítanunk fixpontosra. Ez könnyen megoldható, hiszen az egyes változók értéktartománya előre ismert, például tudjuk, hogy a DC feszültség biztosan kisebb, mint $U_{DC}=1000\ V$.
 
-A lebegépontos számábárolás megkülönböztet egyszeres (floating) és kétszeres (double) precizitást. Előbbi a számot 32 utóbbi pedig 64 biten tárolja.
+A lebegőpontos számábrázolás megkülönböztet egyszeres (floating) és kétszeres (double) precizitást. Előbbi a számot 32 utóbbi pedig 64 biten tárolja.
 
 \begin{figure}[H]
 	\centering
@@ -383,9 +397,9 @@ A lebegépontos számábárolás megkülönböztet egyszeres (floating) és két
 	\label{fig:floating}
 \end{figure}
 
-Ilyen módon a floating körülbelül 7, a double pedig 17 tizedesjegy pontosságot enged meg. Mindkét ábrázolásmód 1 darab előjel bitet után mantissza és exponens formájában tárolja a számot. A mantissza normál alakban, a kettedespont mögötti biteket tárolja. A normálak biztosítja, hogy a kettedespont előtt már csak garantáltan 1 darab 1-es van, így ez elhagyható. Az exponens pedig egy a kettedespont helyét tárolja úgy, hogy a valós kitevő 127-el csökkentve van.
+Ilyen módon a floating körülbelül 7, a double pedig 17 tizedes jegy pontosságot enged meg. Mindkét ábrázolás mód 1 darab előjel bitet használ, ami után mantissza és exponens formájában tárolja a szám abszolút értékét. A mantissza normál alakban, a kettedes pont mögötti biteket tárolja. A normál alak biztosítja, hogy a kettedes pont előtt már csak garantáltan 1 darab 1-es van, így ez információ veszteség nélkül elhagyható. Az exponens pedig a kettedes pont helyét tárolja úgy, hogy a valós kitevő 127-el csökkentve van.
 
-A fixpontos ábrázolás ezzel szemben rögzíti a tizedespont helyét, valamint azt nem kódolja a változóban, hanem a típusa határozza meg az értelmezés módját. A MATLAB-nak saját fixpontos formátuma van, melyet a \emph{fixdt(s,b,f)} formátummal használhatunk. Az \emph{s} jelöli, hogy az adott szám előjeles-e vagy sem, ha 1 az értéke akkor igen, ha 0, akkor nem. A következő \emph{b} a bitek számát jelöli összesen, theát itt adhatjuk meg, hogy hány biten legyen ábrázolva a szám. Ha az adott szám előjeles, akkor nem adódik hozzá a mérethez még egy bit az előjel miatt, hanem 1 bittel csökken a szám tárolására felhasnználható hely. Az utolsó \emph{f} szám jeleni a kettedesjegyek számát. Néhány példa \aref{tab:fixdt}. táblázatban látható. 
+A fixpontos ábrázolás ezzel szemben rögzíti a tizedespont helyét, valamint azt nem kódolja a változóban, hanem a típusa határozza meg az értelmezés módját. A MATLAB-nak saját fixpontos formátuma van, melyet a \emph{fixdt(s,b,f)} formátummal használhatunk. Az \emph{s} jelöli, hogy az adott szám előjeles-e vagy sem, ha 1 az értéke akkor igen, ha 0, akkor nem. A következő \emph{b} a bitek számát jelöli összesen, tehát itt adhatjuk meg, hogy hány biten legyen ábrázolva a szám. Ha az adott szám előjeles, akkor nem adódik hozzá a mérethez még egy bit az előjel miatt, hanem 1 bittel csökken a szám tárolására felhasználható hely. Az utolsó \emph{f} szám jeleni a kettedes jegyek számát. Néhány példa \aref{tab:fixdt}. táblázatban látható.
 
 \begin{table}[]
 \centering
@@ -402,7 +416,7 @@ fixdt(1,8,2)  & -31..32     			& 0,25    \\ \hline
 \label{tab:fixdt}
 \end{table}
 
-A Simulink alapbeállításként double változóként hozza létre a jeleket és dolgozik velük. Az FPGA-val való kompatibilitás miatt azonban át kell étrni fixpontos ábárzolásra. Ennek a feladatnak a megkönnyítésére a MATLAB tartalmazza a \emph{Fixpoint Advisor} nevű eszközt, azonban ilyen kis méretű modell esetében az eszköz jó felparaméterezése tovább tarthat, mint maga a megvalósítás. Az egyes változók határai látszanak a vizsált értéktartományból. Ezen felül korlátot jelet még maga a hardver, mivel az FPGA maximum egy 18 és egy 25 bites számot tud összeszorozni. A mayimumális bitszám miatt tehát a pontosság és az ábrázolható értéktartomány között kell megtalálni az egyensúlyt.
+A Simulink alap beállításként double változóként hozza létre a jeleket és dolgozik velük. Az FPGA-val való kompatibilitás miatt azonban át kell térni fixpontos ábrázolásra. Ennek a feladatnak a megkönnyítésére a MATLAB tartalmazza a \emph{Fixpoint Advisor} nevű eszközt, azonban ilyen kis méretű modell esetében az eszköz jó felparaméterezése tovább tarthat, mint maga a megvalósítás. Az egyes változók határai látszanak a vizsgált érték tartományból. Ezen felül korlátot jelent még maga a hardver, mivel az FPGA maximum egy 18 és egy 25 bites számot tud összeszorozni. A minimális bit szám miatt tehát a pontosság és az ábrázolható érték tartomány között kell megtalálni az egyensúlyt.
 
 \begin{table}[]
 \centering
@@ -418,17 +432,19 @@ DC feszültség  			& 0..1000     			 		& fixdt(0,18,6)    \\ \hline
 \label{tab:values}
 \end{table} 
 
-A kezdeti értékek meghatározása után azonban a modellen belüli számítások elvégézéséhez is meg kell találnunk a megfelelő típusokat. Ennek érdekében célszerű megvizsgálni, hogy az egyes műveletek milyen változást okoznak az ábrázolandó tartományban.
+\todo[inline]{Ezt még ki kell számolgatni}
 
-Összeadás esetén ha fixdt(1,n,f1) és fixdt(1,n,f2) típusú számokat adunk össze (f1 < f2), esetén el kell dönteni, hogy a pontosság csökkenhet-e. Amennyiben igen, használhatjuk a továbbiakban a kevesebb törtrész bitet használó típust. Ha nem engedhető meg az ábárzolás pontosságának csökkenése fixdt(1,n+f1-f2,f1) típust kell választani kimenetként. Bár a táoláshoz szükséges bitek száma megnő, nem történik sem túlcsordulás és nem vesztünk az ábrázolási pontosságból sem.
+A kezdeti értékek meghatározása után azonban a modellen belüli számítások elvégezéséhez is meg kell találnunk a megfelelő típusokat. Ennek érdekében célszerű megvizsgálni, hogy az egyes műveletek milyen változást okoznak az ábrázolandó tartományban.
 
-Szorzás esetén az eredményhez szükséges bitek számának változását az operandus kettes alapú logaritmusával számíthatjuk. A törrész bitek száma $-log_2\abs{a} = m$ bittel nő a törtrész bitek száma.
+Összeadás esetén ha $fixdt(1,n,f1)$ és $fixdt(1,n,f2)$ típusú számokat adunk össze $(f1 < f2)$, esetén el kell dönteni, hogy a pontosság csökkenhet-e. Amennyiben igen, használhatjuk a továbbiakban a kevesebb törtrész bitet használó típust. Ha nem engedhető meg az ábrázolás pontosságának csökkenése $fixdt(1,n+f1-f2,f1)$ típust kell választani kimenetként. Bár a tároláshoz szükséges bitek száma megnő, nem történik sem túlcsordulás és nem vesztünk az ábrázolási pontosságból sem.
 
-Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagyon kis számokat kell akkumulálni. A folytonos összegzés miatt az eredmény nagyra nőhet, a pontosságot azonban úgy kell megválasztnai, hogy ábrázolható legyen az inkrement. Szerencsére összeadni több biten is lehet az FPGA-ban, így nem okoz problémát nagyobb típust váalsztani, azonban az integrátor után vissza kell konvertálni 18 biten ábrázolható méretre, még ha ezzel a pontossábgól veszítünk is.
+Szorzás esetén az eredményhez szükséges bitek számának változását az operandus kettes alapú logaritmusával számíthatjuk. A tört rész bitek száma $-log_2\abs{a} = m$ bittel nő a törtrész bitek száma. A kimeneti változó típus tehát $fixdt(s,n,f+m)$.
+
+Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagyon kis számokat kell akkumulálni. A folytonos összegzés miatt az eredmény nagyra nőhet, a pontosságot azonban úgy kell megválasztani, hogy ábrázolható legyen az inkrement. Szerencsére összeadni több biten is lehet az FPGA-ban, így nem okoz problémát nagyobb típust választani, azonban az integrátor után vissza kell konvertálni 18 biten ábrázolható méretre, még ha ezzel a pontosságból veszítünk is.
 
 \subsection{HDL kódgeneráció}
 
-Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást is beállítottuk az összes változóra, készen állunk a verilog fájlok előállítására. Ehhez szükséges a Matlab HDL Coder toolboxa. Amennyiben rendelkezünk ezzel, a HDL Workflow Advisor lesz a segítségünkre a folyamat elvégzésében.
+Miután sikeresen diszkretizáltuk a modellt és a megfelelő szám ábrázolást is beállítottuk az összes változóra, készen állunk a verilog fájlok előállítására. Ehhez szükséges a Matlab HDL Coder toolboxa. Amennyiben rendelkezünk ezzel, a HDL Workflow Advisor lesz a segítségünkre a folyamat elvégzésében.
 
 \begin{figure}[h!]
 	\centering
@@ -437,7 +453,7 @@ Miután sikeresen diszkretizáltuk a modellt és a megfelelő számábázolást 
 	\label{fig:hdl_advisor}
 \end{figure}
 
-Első lépésben be kell állítani, hogy miylen típusú FPGA-ra szretnénk kódot generálni, valamint be kell állítani, hogy hova készüljön el a projekt. Ezek után a szoftver még egyszer ellenőrzi, hogy a modellből lehet-e HDL kódot generálni. Ellenőrzi, hogy van-e esetleg nem támogatott blokk a modellben, van-e algebrai hurok, illetve az időzítések megfelelőek-e. Ha minden teszt sikeres volt, akkor egyben le is futtathatjuk a taskokat a projekt létrehozásáig, a többi lépésre nincsen szükség. Ezzel előáll a verilog projekt, és ha minden sikeres volt az alábbi ablak fogad minket.
+Első lépésben be kell állítani, hogy milyen típusú FPGA-ra szeretnénk kódot generálni, valamint be kell állítani, hogy hova készüljön el a projekt. Ezek után a szoftver még egyszer ellenőrzi, hogy a modellből lehet-e HDL kódot generálni. Ellenőrzi, hogy van-e esetleg nem támogatott blokk a modellben, van-e algebrai hurok, illetve az időzítések megfelelőek-e. Ha minden teszt sikeres volt, akkor egyben le is futtathatjuk a taskokat a projekt létrehozásáig, a többi lépésre nincsen szükség. Ezzel előáll a verilog projekt, és ha minden sikeres volt az alábbi ablak fogad minket.
 
 \begin{figure}[h!]
 	\centering
@@ -446,9 +462,9 @@ Első lépésben be kell állítani, hogy miylen típusú FPGA-ra szretnénk kó
 	\label{fig:hdl_report}
 \end{figure}
 
-Itt megnézhetjük újra, hogy milyen beállításokkal készült el a projekt, illetve megtekinthetjük a kimeneti fájlokat is. A generált kód jól struktúrált, bár kevéssé olvasható. Az egyes blokok egy-egy modulként fordlnak le, melyeket a fő modul példányosít.
+Itt megnézhetjük újra, hogy milyen beállításokkal készült el a projekt, illetve megtekinthetjük a kimeneti fájlokat is. A generált kód jól strukturált, bár kevéssé olvasható. Az egyes blokkok egy-egy modulként fordulnak le, melyeket a fő modul példányosít.
 
-A következő lépésben Vivadoban létre kell hozni a keretrendszert adó kódot, majd ebbe integrálva a msot készült modellt, generálhatjuk és az FPGA-ba töltendő bitstream-et.
+A következő lépésben Vivadoban létre kell hozni a keret rendszert adó kódot, majd ebbe integrálva a most készült modellt, generálhatjuk és az FPGA-ba töltendő bitstream-et.
 
 \subsection{Vivado projekt}
 
@@ -468,4 +484,4 @@ A példányosítás a top\_module.v fájlban történik. Megfelelő projekt beá
 	\label{fig:hdl_report}
 \end{figure}
 
-A monitorozást a már több helyen bevált HiTERM program segítségével valósítottam meg. A szoftver beágyazott folyamatok megfigyelésére biztosít lehetőséget. Soros porton kommunikál az eszközzel, a megfelelő memóriacímekkről olvas periodikusan változókat, illetve megfelelő konfiguráció esetén módosítani is lehet azokat.
+A monitorozást a már több helyen bevált HiTERM program segítségével valósítottam meg. A szoftver beágyazott folyamatok megfigyelésére biztosít lehetőséget. Soros porton kommunikál az eszközzel, a megfelelő memória címekről olvas periodikusan változókat, illetve megfelelő konfiguráció esetén módosítani is lehet azokat.
