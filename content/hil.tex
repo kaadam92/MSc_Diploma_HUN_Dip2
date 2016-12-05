@@ -107,8 +107,6 @@ Egy iylen teszt és fejlesztési eszköz fejlesztése során az egyik legfontosa
 	\label{fig:ztex_block}
 \end{figure}
 
-\todo[inline]{Képhiba}
-
 Ezen felül a rajta található Xilinx Artix 7 FPGA megfelelő hűtését is biztosítja a panel. Az FPGA főbb datai \aref{table:artix7spec} táblázatban láthatóak. Ez az eszköz a Xilinx jelegelg kereskedelemi forgalomban kapható egyik zászlóshajója, amit bizonyít is a ZTEX panel 500 Eurós vételára.
 
 \begin{table}[]
@@ -178,6 +176,8 @@ Az így kapott jelet már a modellből az FPGA lábára vezethetjük. Mivel az F
 \end{figure}
 
 \Aref{fig:lowpass_sim}. ábrán látható a szűrő átvitelének szimulációja. Két töréspont látható a Bode-diagrammon $10\ Hz$ és $10\ kHz$ frekvenciánál. A szűrő méretezésénél figyelembe kell venni a kimeneti jelek sávszélességét, ami a mi esteünkben $1\ kHz$ alatt van, illetve a kiementei négyszögjel frekvenciáját. Ez $18\ MHz$, így biztosak lehetünk benne, hogy a kimeneti jel az alkalmazás igényeinek megfelelő.
+
+\subsection{Kiegészítő csatlakozó}
 
 \section{Simulink modell}
 
