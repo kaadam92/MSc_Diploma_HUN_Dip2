@@ -10,7 +10,7 @@ A HIL szimulátor hardver nem más, mint egy interfész elektronika a vezérlő 
 
 \subsection{CCB és MCB csatlakozó}
 \todo[inline]{Meg kell rendesen foglalmani a kis mondandóm}
-A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART vonalon valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{table:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
+A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART vonalon valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{tab:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
 
 \begin{table}[]
 \centering
