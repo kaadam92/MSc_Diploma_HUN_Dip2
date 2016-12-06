@@ -194,7 +194,7 @@ A formulából jól látszik, hogy az aktuális érték kiszámításához szük
 A két korábbi módszer kombinációja, mely széles körben alkalmazott szimulációs eljárások során a következő. Ez a módszer a trapéz módszer, a változók jelenlegi és következő lépésbeli értékek átlagát használja, így jobb közelítést adva, mintha két korábbi értéket használna:
 
 \begin{equation}
-\underline{x}[n + 1] = \ x[n] + \frac{1}{2}\underline{\underline{A}} \cdot T \cdot \underline{x}[n + 1] + \frac{1}{2}\underline{\underline{A}}\cdot{}T\cdot{}\underline{u}[n] + \frac{1}{2}\underline{\underline{B}} \cdot T \cdot \underline{x}[n + 1] + \frac{1}{2}\underline{\underline{B}}\cdot{}T\cdot{}\underline{y}[n] \\[0.3em]
+\underline{x}[n + 1] = \ x[n] + \frac{1}{2}\underline{\underline{A}} \cdot T \cdot \underline{x}[n + 1] + \frac{1}{2}\underline{\underline{A}}\cdot{}T\cdot{}\underline{x}[n] + \frac{1}{2}\underline{\underline{B}} \cdot T \cdot \underline{u}[n + 1] + \frac{1}{2}\underline{\underline{B}}\cdot{}T\cdot{}\underline{u}[n] \\[0.3em]
 \end{equation}
 
 \paragraph{}

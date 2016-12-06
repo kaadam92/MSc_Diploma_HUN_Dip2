@@ -306,17 +306,21 @@ A diódás modell nagyon leegyszerűsített, csak azon üzem állapotát repreze
 
 Ezen a ponton két problémába is ütközünk: a diódás hídnak nincs olyan állapota, hogy egyik dióda sem vezet. Emiatt nem tud kialakulni 0 áram, csak nulla körül ugrál. A szaturációs blokkok levágják a negatív tartományt, így a maradék kis pozitív áramok összege miatt terhelés nélkül a DC kondenzátorunk a végetlenségig töltődik. A jövőben tervezem a modell további finomítását, ehhez egy állapot gépet kell majd megvalósítani, a modell demonstrációs jellegére való tekintettel azonban most mást megoldást választottam. Empirikus úton kiderül, hogy a kondenzátort minimum $350\ mA$-el terhelni kell, hogy ne integrálódjon el, hanem stabilizálódjon az értéke.
 
-A másik probléma abból adódik, hogy DC fojtó modelljének feszültség bemenetre van szüksége, és áram kimenetet ad, a diódás hídnak pedig áram kimenete van. Más struktúrájú modellel lehetséges így is megvalósítani a szimulációt, azonban egyszerűbb szétválasztani ezeket az állapot változókat egy virtuális RC-tag bevezetésével. Ennek segítségével az egyenirányító és a fojtó között is megjelenik a modellben egy potenciál. Az RC-tag paramétereit úgy választjuk meg, hogy az a modell valós működését ne befolyásolja. Úgy is tekinthetünk erre a tagra, mint egy PI szabályzóra, mely az induktivitáson eső feszültséget igyekszik $0$-ra szabályozni, felvéve a DC-link kondenzátor feszültségét.
+A másik probléma abból adódik, hogy DC fojtó modelljének feszültség bemenetre van szüksége, és áram kimenetet ad, a diódás hídnak pedig áram kimenete van. Más struktúrájú modellel lehetséges így is megvalósítani a szimulációt, azonban egyszerűbb szétválasztani ezeket az állapot változókat egy virtuális RC-tag bevezetésével. Ennek segítségével az egyenirányító és a fojtó között is megjelenik a modellben egy potenciál. Az RC-tag paramétereit úgy választjuk meg, hogy az a modell valós működését ne befolyásolja. Úgy is tekinthetünk erre a tagra, mint egy PI szabályzóra, mely a hálózati induktivitáson és a DC köri fojtón folyó áramok közötti különbséget igyekszik $0$-ra szabályozni, felvéve a DC-link kondenzátor feszültségét. A szabályzó ily módon történő behangolásást az alábbi egyenletekkel meghatározott értékek alapján tehetjük meg:
 
 \begin{equation}
-\frac{1}{RC} \ll f_{sim}
+f_{RC} = \frac{1}{2\pi{}RC} \ll f_{sim}
 \end{equation}
 
 \begin{equation}
-\frac{1}{\sqrt{LC}} = R
+C_{RC} = frac{1}{f_{RC}^2\cdot{}L_{AC}}
 \end{equation}
 
-\todo[inline]{Ez nem így van, csak placeholder}
+\begin{equation}
+C_{RC} = frac{1}{f_{RC}^2\cdot{}L_{AC}}
+\end{equation}
+
+,ahol $L_{AC}$ a hálózat induktivitása, $f_{sim}$
 
 \begin{figure}[H!]
 	\centering
