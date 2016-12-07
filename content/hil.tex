@@ -16,55 +16,55 @@ A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatá
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Név}   & \textbf{I/O} & \textbf{A/D} & \textbf{Leírás}                 \\ \hline
-UoutU          & Digital      & Bemenet      & Az U fázis nullátmenetének jele \\ \hline
-UoutV          & Digital      & Bemenet      & A V fázis nullátmenetének jele  \\ \hline
-UoutW          & Digital      & Bemenet      & A W fázis nullátmenetének jele  \\ \hline
-Sto1SatusX     & Digital      & Bemenet      &                                 \\ \hline
-Sto2SatusX     & Digital      & Bemenet      &                                 \\ \hline
-MCB\_TxD       & Digital      & Kimenet      &                                 \\ \hline
-MCB\_RxD       & Digital      & Bemenet      &                                 \\ \hline
-EEPROM\_SDA    & Digital      & Be/Kimenet   &                                 \\ \hline
-EEPAROM\_SCL   & Digital      & Kimenet      &                                 \\ \hline
-RectStatusC    & Digital      & Bemenet      &                                 \\ \hline
-PrechargeCtrlX & Digital      &              &                                 \\ \hline
-IgbtBFltX      & Digital      &              &                                 \\ \hline
-IgbtBRdy       & Digital      &              &                                 \\ \hline
-IgbtBRstX      & Digital      &              &                                 \\ \hline
-IgbtPsuCtrlX   & Digital      &              &                                 \\ \hline
-IgbtInvFltX    & Digital      &              &                                 \\ \hline
-IgbtInvRdy     & Digital      &              &                                 \\ \hline
-IgbtInvRstX    & Digital      & Kimenet      &                                 \\ \hline
-IgbtU1         & Digital      & Kimenet      &                                 \\ \hline
-IgbtU2         & Digital      & Kimenet      &                                 \\ \hline
-IgbtV1         & Digital      & Kimenet      &                                 \\ \hline
-IgbtV2         & Digital      & Kimenet      &                                 \\ \hline
-IgbtW1         & Digital      & Kimenet      &                                 \\ \hline
-IgbtW2         & Digital      & Kimenet      &                                 \\ \hline
-IgbtB          & Digital      & Kimenet      &                                 \\ \hline
-FanPsuCtrC     & Digital      & Kimenet      &                                 \\ \hline
-FanExtCtrC     & Digital      & Kimenet      &                                 \\ \hline
-FanIntCtrC     & Digital      & Kimenet      &                                 \\ \hline
-FanExtSpeedC1  & Digital      & Kimenet      &                                 \\ \hline
-FanExtSpeedC2  & Digital      & Kimenet      &                                 \\ \hline
-TIgbtW         & Analog       & Bemenet      &                                 \\ \hline
-15VCM          & Analog       & Bemenet      &                                 \\ \hline
-TIgbtV         & Analog       & Bemenet      &                                 \\ \hline
-UdcMN          & Analog       & Bemenet      &                                 \\ \hline
-UdcMP          & Analog       & Bemenet      &                                 \\ \hline
-IWN            & Analog       & Bemenet      &                                 \\ \hline
-IWP            & Analog       & Bemenet      &                                 \\ \hline
-TIgbtU         & Analog       & Bemenet      &                                 \\ \hline
-TIgbtB         & Analog       & Bemenet      &                                 \\ \hline
-IUP            & Analog       & Bemenet      &                                 \\ \hline
-IUN            & Analog       & Bemenet      &                                 \\ \hline
-IVP            & Analog       & Bemenet      &                                 \\ \hline
-IVN            & Analog       & Bemenet      &                                 \\ \hline
-TA             & Analog       & Bemenet      &                                 \\ \hline
-5VSto1         & Analog       & Bemenet      &                                 \\ \hline
-5VSto2         & Analog       & Bemenet      &                                 \\ \hline
-UdcP           & Analog       & Bemenet      &                                 \\ \hline
-UdcN           & Analog       & Bemenet      &                                 \\ \hline
+\textbf{Név}   & \textbf{I/O} & \textbf{A/D} & \textbf{Leírás}                 					\\ \hline
+UoutU          & Digital      & Bemenet      & U fázis nullátmenetének jel 						\\ \hline
+UoutV          & Digital      & Bemenet      & V fázis nullátmenetének jel  					\\ \hline
+UoutW          & Digital      & Bemenet      & W fázis nullátmenetének jel  				    \\ \hline
+Sto1SatusX     & Digital      & Bemenet      & Vészleállító jel állapot   				     	\\ \hline
+Sto2SatusX     & Digital      & Bemenet      & Vészleállító jel állapot    						\\ \hline
+MCB\_TxD       & Digital      & Kimenet      & MCB kommunikációs vonal (UART)    				\\ \hline
+MCB\_RxD       & Digital      & Bemenet      & MCB kommunikációs vonal (UART)                   \\ \hline
+EEPROM\_SDA    & Digital      & Be/Kimenet   & EEPROM kommunikációs vonal (SPI)                 \\ \hline
+EEPAROM\_SCL   & Digital      & Kimenet      & EEPROM kommunikációs vonal (SPI)                 \\ \hline
+RectStatusC    & Digital      & Bemenet      & Egyenirányító státusz jel                        \\ \hline
+PrechargeCtrlX & Digital      &              & Előtöltő vezérlő jel                             \\ \hline
+IgbtBFltX      & Digital      &              & Fék IGBT meghajtó hibajel                        \\ \hline
+IgbtBRdy       & Digital      &              & Fék IGBT meghajtó státusz jel                    \\ \hline
+IgbtBRstX      & Digital      &              & Fék IGBT meghajtó reset jel                      \\ \hline
+IgbtPsuCtrlX   & Digital      &              & IGBT meghajtó tápegység vezérlő jel              \\ \hline
+IgbtInvFltX    & Digital      &              & Inverter IGBT meghajtó hiba jel                  \\ \hline
+IgbtInvRdy     & Digital      &              & Inverter IGBT meghajtó státusz jel               \\ \hline
+IgbtInvRstX    & Digital      & Kimenet      & Inverter IGBT meghajtó hiba jel                  \\ \hline
+IgbtU1         & Digital      & Kimenet      & Az U fázis felső IGBT-t vezérlő PWM jel          \\ \hline
+IgbtU2         & Digital      & Kimenet      & Az U fázis felső IGBT-t vezérlő PWM jel          \\ \hline
+IgbtV1         & Digital      & Kimenet      & A V fázis felső IGBT-t vezérlő PWM jel           \\ \hline
+IgbtV2         & Digital      & Kimenet      & A V fázis alsó IGBT-t vezérlő PWM jel            \\ \hline
+IgbtW1         & Digital      & Kimenet      & A W fázis IGBT-t vezérlő PWM jel                 \\ \hline
+IgbtW2         & Digital      & Kimenet      & A W fázis IGBT-t vezérlő PWM jel                 \\ \hline
+IgbtB          & Digital      & Kimenet      & A fék IGBT-t vezérlő PWM jel                     \\ \hline
+FanPsuCtrC     & Digital      & Kimenet      & Ventillátor tápegység vezérlő jel                \\ \hline
+FanExtCtrC     & Digital      & Kimenet      & Külső ventillátor vezérkő jel                    \\ \hline
+FanIntCtrC     & Digital      & Kimenet      & Belső ventillátor vezérlő jel                    \\ \hline
+FanExtSpeedC1  & Digital      & Kimenet      & Tápegység sebesség jel                           \\ \hline
+FanExtSpeedC2  & Digital      & Kimenet      & Tápegység sebesség jel                           \\ \hline
+TIgbtW         & Analog       & Bemenet      & IGBT hőmérséklet mérés                           \\ \hline
+15VCM          & Analog       & Bemenet      & PIB $15\ V$ tápjának mérés                       \\ \hline
+TIgbtV         & Analog       & Bemenet      & IGBT hőmérséklet mérés                           \\ \hline
+UdcMN          & Analog       & Bemenet      & $U_{DC}$ félfeszültség mérés                     \\ \hline
+UdcMP          & Analog       & Bemenet      & $U_{DC}$ félfeszültség mérés                     \\ \hline
+IWN            & Analog       & Bemenet      & W fázis áramának mérés                           \\ \hline
+IWP            & Analog       & Bemenet      & W fázis áramának mérés                           \\ \hline
+TIgbtU         & Analog       & Bemenet      & IGBT hőmérséklet mérés                           \\ \hline
+TIgbtB         & Analog       & Bemenet      & IGBT hőmérséklet mérés                           \\ \hline
+IUP            & Analog       & Bemenet      & U fázis áramának mérés                           \\ \hline
+IUN            & Analog       & Bemenet      & U fázis áramának mérés                           \\ \hline
+IVP            & Analog       & Bemenet      & V fázis áramának mérés                           \\ \hline
+IVN            & Analog       & Bemenet      & V fázis áramának mérés                           \\ \hline
+TA             & Analog       & Bemenet      & Környezeti hőmérséklet mérés                     \\ \hline
+5VSto1         & Analog       & Bemenet      & Vészleállító jel tépfeszültségének mérés         \\ \hline
+5VSto2         & Analog       & Bemenet      & Vészleállító jel tépfeszültségének mérés         \\ \hline
+UdcP           & Analog       & Bemenet      & $U_{DC}$ feszültség mérés                        \\ \hline
+UdcN           & Analog       & Bemenet      & $U_{DC}$ feszültség mérés                        \\ \hline
 \end{tabular}
 \caption{A CCB jelei}
 \label{tab:ccbsignals}
@@ -109,7 +109,7 @@ Egy ilyen teszt és fejlesztési eszköz készítése során az egyik legfontosa
 	\label{fig:ztex_block}
 \end{figure}
 
-Ezen felül a rajta található Xilinx Artix 7 FPGA megfelelő hűtését is biztosítja a panel. Az FPGA főbb adatai \aref{table:artix7spec} táblázatban láthatóak. Ez az eszköz a Xilinx jelenleg kereskedelmei forgalomban kapható egyik zászlós hajója, amit bizonyít is a ZTEX panel 500 Eurós vételára.
+Ezen felül a rajta található Xilinx Artix 7 FPGA megfelelő hűtését is biztosítja a panel. Az FPGA főbb adatai \aref{tab:artix7spec} táblázatban láthatóak. Ez az eszköz a Xilinx jelenleg kereskedelmei forgalomban kapható egyik zászlós hajója, amit bizonyít is a ZTEX panel 500 Eurós vételára.
 
 \begin{table}[]
 \centering
@@ -126,7 +126,7 @@ Blokk RAM összesen (kb)      & 13140  \\
   
 \end{tabular}
 \caption{A Xilinx Artix 7 XC7A200T}
-\label{artix7spec}    
+\label{tab:artix7spec}    
 \end{table}
 
 Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardvernek, a későbbi bővülésre is hagy lehetőséget. A frimware elkészítésére és fejlesztésére a Xilinx Vivado környezet biztosít lehetőséget. Ebben készült el a keret rendszer, mely a Simulink-ból generált HDL fájlokat tudja fogadni, megfelelő interfészen keresztül a kártyára vezetni.
@@ -138,7 +138,7 @@ Az FPGA nem rendelkezik analóg kimentekkel, azonban a CCB számára elő kell �
 
 \todo[inline]{PWM vs sigma delta spektrum}
 
-Igen félrevezető névvel szokás "1 bites DA" átalakítónak is nevezni. A kifejezés egyszerűséget és alacsony teljesítményt sugall, ennek ellenére a megoldás rendkívül lineáris és nagy felbontású eredményt ad, így elterjedten használják pl. audio eszközökben is.
+Igen félrevezető névvel szokás ,,1 bites DA" átalakítónak is nevezni. A kifejezés egyszerűséget és alacsony teljesítményt sugall, ennek ellenére a megoldás rendkívül lineáris és nagy felbontású eredményt ad, így elterjedten használják pl. audio eszközökben is.
 
 A mi esetünkben két részre bontható az átalakító. A modellben fut egy analóg jelből digitális jelet létrehozó szigma-delta átalakító, majd az így kiadott digitális jelet szűrjük már az FPGA-n kívül egy alul áteresztő szűrűvel. \Aref{fig:sigmadelta} ábra szemlélteti az átalakító működését. A bejövő analóg jelből levonjuk a hiba jelet, majd egy komparátor összehasonlítja egy referenciával. Amennyiben nagyobb a bejövő jel, a kimenet logikai "1" értéket vesz fel, ha kisebb, logikai "0"-t. Ezt a jelet, egy 1-bites DAC-on keresztül vezetve akkumuláljuk, így kialakítva a hiba jelet. 
 
@@ -258,14 +258,14 @@ Az első lépés a hálózat modellezése. Ehhez szükségünk van egy szinuszos
 I(s) = \frac{U(s)}{R+Ls}
 \end{equation}
 
-Mivel a három fázis induktivitása nem független egymástól, ezért az egyes fázisok egymásra hatását is figyelembe kell venni a szimuláció során. Ez jelentős számításbeli többletet jelenteni, a modell struktúráját is bonyolítaná, ezért a fázisokat inkább szétcsatoljuk és az $x,y$ koordináta-rendszerben ábrázoljuk őket. Emiatt a szinusz generátor modulban már egyből egy szinuszt és koszinuszt hozunk létre, azaz két szinusz hullámot, $90°$ fáziskülönbséggel. Ezt a két jelet vezetjük át egy-egy R-L blokkon megkapva így a hálózati áramokat. Azért, hogy visszakapjuk a három fázisú mennyiségeket, inverz Clarke transzformációt alkalmazunk a két jelent, így előáll a három fázis árama, mely a diódás híd bemenetéül szolgál.
+Mivel a három fázis árama a csatolt induktivitások miatt nem független egymástól, ezért az egyes fázisok egymásra hatását is figyelembe kell venni a szimuláció során. Ez jelentős számításbeli többletet jelentene, a modell struktúráját is bonyolítaná, ezért a fázisokat inkább szétcsatoljuk és az $x,y$ koordináta-rendszerben ábrázoljuk őket. Emiatt a szinusz generátor modulban már egyből egy szinuszt és koszinuszt hozunk létre, azaz két szinusz hullámot, $90\°$ fáziskülönbséggel. Ezt a két jelet vezetjük át egy-egy R-L blokkon megkapva így a hálózati áramokat. Azért, hogy visszakapjuk a három fázisú mennyiségeket, inverz Clarke transzformációt alkalmazunk a két jelent, így előáll a három fázis árama, mely a diódás híd bemenetéül szolgál.
 
 \begin{equation}
 \centering
 \begin{bmatrix}
-       U_a\\[0.3em]
-       U_b\\[0.3em]
-       U_c          
+       i_a\\[0.3em]
+       i_b\\[0.3em]
+       i_c          
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -274,10 +274,11 @@ Mivel a három fázis induktivitása nem független egymástól, ezért az egyes
        -\frac{1}{2} & -\frac{\sqrt{3}}{2} & 1 
 \end{bmatrix}
 \begin{bmatrix}
-       U_x\\[0.3em]
-       U_y\\[0.3em]
-       U_0,,        
-\end{bmatrix}    
+       i_x\\[0.3em]
+       i_y\\[0.3em]
+       i_0,,        
+\end{bmatrix}
+\label{eq:inv_clark}   
 \end{equation}
 
 \begin{equation}
@@ -353,19 +354,6 @@ DC link kondenzátor kapacitása & $270\ \mu{}F $
 	\label{fig:cont_run}
 \end{figure}
 
-\subsection{A DC fojtó szerepe}
-
-A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojtót alkalmazni. Enélkül a DC kondenzátor, mint kis impedanciás terhelés jelenne meg a hálózat felé. Ha felteszünk egy ipari környezetben szokásos $1,6\ MVA$-s hálózatot, egyértelművé válik, hogy a hálózatból nagyságrendekkel nagyobb áramot ki tudunk venni, mint a frekvenciaváltó üzemi értékei, ebből adódóan a kondenzátor minden kommutációnál óriási áram tüskékkel töltődne. Az induktivitás ezeket a tüskéket simítja el, csökkentve a DC kondenzátort érő áram hullámosságot és a feszültség hullámosságot is. \Aref{fig:chokenochoke}. ábrán látható egy DC fojtóval ellátott és egy anélküli szimuláció eredménye. Látható, hogy a fojtóval ellátott esetben jelentősen kisebb a DC hullámosság, valamint az áram jelalakja is sokkal simább.
-
-\begin{figure}[H!]
-	\centering
-	\includegraphics[width = \textwidth]{figures/choke_vs_nochoke_11A.png}
-	\caption{A DC fojtó szerepe} 
-	\label{fig:chokenochoke}
-\end{figure}
-
-
-
 \subsection{Áttérés diszrét időre}
 
 Az eddig megvalósított hálózat modell folytonos idejű, Laplace tartományban ábrázolt egyenletekkel. Az FPGA, mint minden digitális rendszer azonban diszkrét időben fogja ezeket megoldani. Emiatt a modellt át kell transzformálni \emph{z} tartományba. Az integrátor matematikailag az alábbi alaknak felel meg:
@@ -427,16 +415,14 @@ A Simulink alap beállításként double változóként hozza létre a jeleket �
 \begin{tabular}{|l|l|l|}
 \hline
 Jel  					&		 tartomány              & választott adattípus \\ \hline
-Hálózati feszültség (V) & -1000-1000          	 		& fixdt()\\ \hline
-Hálózati áram (A) 		& -50..50						& fixdt()\\ \hline
-DC áram 				& -50..50        	   	   		& fixdt() \\ \hline
+Hálózati feszültség (V) & -1000-1000          	 		& fixdt(1,18,7)\\ \hline
+Hálózati áram (A) 		& -50..50						& fixdt(1,18,11)\\ \hline
+DC áram 				& -50..50        	   	   		& fixdt(1,18,11) \\ \hline
 DC feszültség  			& 0..1000     			 		& fixdt(0,18,6)    \\ \hline
 \end{tabular}
 \caption{A vizsgált jeltartományok}
 \label{tab:values}
 \end{table} 
-
-\todo[inline]{Ezt még ki kell számolgatni}
 
 A kezdeti értékek meghatározása után azonban a modellen belüli számítások elvégezéséhez is meg kell találnunk a megfelelő típusokat. Ennek érdekében célszerű megvizsgálni, hogy az egyes műveletek milyen változást okoznak az ábrázolandó tartományban.
 
@@ -445,6 +431,13 @@ A kezdeti értékek meghatározása után azonban a modellen belüli számítás
 Szorzás esetén az eredményhez szükséges bitek számának változását az operandus kettes alapú logaritmusával számíthatjuk. A tört rész bitek száma $-log_2\abs{a} = m$ bittel nő a törtrész bitek száma. A kimeneti változó típus tehát $fixdt(s,n,f+m)$.
 
 Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagyon kis számokat kell akkumulálni. A folytonos összegzés miatt az eredmény nagyra nőhet, a pontosságot azonban úgy kell megválasztani, hogy ábrázolható legyen az inkrement. Szerencsére összeadni több biten is lehet az FPGA-ban, így nem okoz problémát nagyobb típust választani, azonban az integrátor után vissza kell konvertálni 18 biten ábrázolható méretre, még ha ezzel a pontosságból veszítünk is.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{figures/hil_model_disc.pdf}
+	\caption{Az FPGA-ba tölthető bemeneti modell} 
+	\label{fig:floating}
+\end{figure}
 
 \subsection{HDL kódgeneráció}
 
