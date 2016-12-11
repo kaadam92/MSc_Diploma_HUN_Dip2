@@ -6,11 +6,8 @@ Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai esz
 
 A HIL szimulátor hardver nem más, mint egy interfész elektronika a vezérlő hardverek és a szimulációt végző FPGA között. \Afigref{hw_architect} ábrán láthatóak a vezérlést végző elemek. A HIL szimulátor feladata a bal oldali, Power Subsystem blokkból érkező jelek előállítása, illetve a vezérlő jelek fogadása.
 
-/todo[inline]{Lehetne részletezni talán}
-
 \subsection{CCB és MCB csatlakozó}
-\todo[inline]{Meg kell rendesen foglalmani a kis mondandóm}
-A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART vonalon valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{tab:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
+A szimuláció során a PIB nem szükséges, ezért az MCB és a CCB kapcsolatát is a HIL elektronika biztosítja. A két eszköz között a kommunikáció UART vonalon valósul meg. A kivitelezés számomra több szempontból is érdekes, mert a kommunikációs sebesség $9\ Mbaud$, illetve a fizikai réteg sem teljesen szokványos. Az UART jelek differenciálisan kerülnek átvitelre az MCB felé, de az Rx és a Tx egy-egy külön érpárt kapott, full-duplex kommunikációt megvalósítva ezzel. Az MCB-n keresztül érkeznek még ezen felül a \emph{Sto1X} és a \emph{Sto2X} jelek. Ezek a jelek szintén speciálisak, az eszköz vészleállításáért felnek. A CCB-vel való kommunikáció \aref{tab:ccbsignals}. táblázatban felsorolt jelek segítségével valósul meg. 
 
 \begin{table}[]
 \centering
@@ -99,8 +96,8 @@ Egy ilyen teszt és fejlesztési eszköz készítése során az egyik legfontosa
 	\label{fig:ztex}
 \end{figure}
 
-\Aref{fig:ztex} ábrán látható ZTEX panel mellett tettem le a voksom. A kártyáról kivezetésre kerültek a JTAG interfész jelei is, azonban az ehhez az FPGA-hoz való Xilinx debugger nem áll rendelkezésre. A ZTEX kártyán azonban egy Cypress mikrovezérlő segítségével, \emph{libusb} driver segítségével betölthető a bitstream mind a RAM-ba, ideiglenes teszthez, mind pedig a FLASH-be, melyből az FPGA minden indítás során be tudja olvasni azt.
-/todo[inline]{Itt is lehet még részletezni a betöltés folyamatát}
+\Aref{fig:ztex} ábrán látható ZTEX panel mellett tettem le a voksom. A kártyáról kivezetésre kerültek a JTAG interfész jelei is, azonban az ehhez az FPGA-hoz való Xilinx debugger nem áll rendelkezésre. A ZTEX kártyán azonban egy Cypress mikrovezérlő segítségével, \emph{libusb} driver segítségével betölthető a bitstream mind a RAM-ba, ideiglenes teszthez, mind pedig a FLASH-be, melyből az FPGA minden indítás során be tudja olvasni azt. Ezt egy a platform köré épült közösség általá fejlesztett java program segítségével tudjuk megtenni. Hátránya, hogy nem megfigyelhető rajta keresztül a rendszer.
+
 
 \begin{figure}[!ht]
 	\centering
@@ -135,8 +132,6 @@ Bár a jelenlegi modell mindössze 10\%-át foglalja le a teljes hardvernek, a k
 \subsection{Szigma-Delta ($\Sigma{}\Delta{}$) átalakítók}
 
 Az FPGA nem rendelkezik analóg kimentekkel, azonban a CCB számára elő kell állítani a normál működés során visszamért analóg jeleket, hiszen ebben rejlik a szimulátor lényege, a vezérlő elektronika szemszögéből nincsen különbség a valós hardver és a szimulátor között. A szigma delta átalakító nagyon nagy vonalakban egy órajel és egy fix impulzus szélességű négyszög jel, mely vagy logikai egy értéket, vagy logikai nulla értéket vesz fel az órajel minden felfutó (vagy lefutó) élére. Az így kialakult impulzus-sor kitöltési tényezője egy hosszabb mintavételi ablakot tekintve arányos a bemeneti kódszóval. Ezek után a jelet egy az órajelnél sokkal kisebb vágási frekvenciájú alul áteresztő szűrűvel feldolgozva analóg jelet kapunk. A szigma delta átalakító egyik előnye a PWM kimenethez képest, hogy a kvantálási zajt nagyfrekvenciás tartományba tolja. \cite{artofelectronics}
-
-\todo[inline]{PWM vs sigma delta spektrum}
 
 Igen félrevezető névvel szokás ,,1 bites DA" átalakítónak is nevezni. A kifejezés egyszerűséget és alacsony teljesítményt sugall, ennek ellenére a megoldás rendkívül lineáris és nagy felbontású eredményt ad, így elterjedten használják pl. audio eszközökben is.
 
@@ -250,9 +245,7 @@ A feladat tehát az, hogy a korábbi modellt egészítsem ki egy olyan blokkal a
 	\label{fig:input_marked}
 \end{figure}
 
-Az első lépés a hálózat modellezése. Ehhez szükségünk van egy szinuszos feszültség előállítására. Mivel a hálózatot egy soros RL modell adja, melynek átviteli függvénye az alábbi.
-
-\todo[inline]{Ez így nagyon nem jó}
+Az első lépés a hálózat modellezése. Ennek első lépése a szinuszosan válatozó mennyiség előállítása. A hálózat jellege miatt jól modellezhető egy soros elllenállással és egy induktivitással, emiatt az átviteli függvénye az alábbi:
 
 \begin{equation}
 I(s) = \frac{U(s)}{R+Ls}
@@ -374,7 +367,6 @@ Ez az átalakítás a modellben grafikusan pedig az alábbi módon jelentkezik:
 
 Tehát az összes integrátor blokkon el kell végezni a fenti átalakítást.
 
-\todo[inline]{Itt még ki kéne egészíteni z tartomány beli rizsával}
 
 \subsection{Fixpontos ábárzolás}
 
@@ -432,12 +424,15 @@ Szorzás esetén az eredményhez szükséges bitek számának változását az o
 
 Integrálás esetén ütközünk jelentősebb problémába (és a Fixpoint Advisor is itt vérzik el), mivel ebben az esetben nagyon kis számokat kell akkumulálni. A folytonos összegzés miatt az eredmény nagyra nőhet, a pontosságot azonban úgy kell megválasztani, hogy ábrázolható legyen az inkrement. Szerencsére összeadni több biten is lehet az FPGA-ban, így nem okoz problémát nagyobb típust választani, azonban az integrátor után vissza kell konvertálni 18 biten ábrázolható méretre, még ha ezzel a pontosságból veszítünk is.
 
+Miután mindezzel elkészültünk \aref{fig:floating}. ábárán látható kiementhez jutunk. Ebből a modellből már tudunk HDL kódot generálni.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/hil_model_disc.pdf}
 	\caption{Az FPGA-ba tölthető bemeneti modell} 
 	\label{fig:floating}
 \end{figure}
+
 
 \subsection{HDL kódgeneráció}
 
