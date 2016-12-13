@@ -33,7 +33,7 @@ Ezek a modern eszközök már nem tartalmaznak mozgó alkatrészt (feltéve pers
 
 \section{Termék specifikáció}
 
-A Hyundai által jelenleg fejlesztett frekvenciaváltó család kis feszültségű, általános célú PWM vezérlet IGBT kapcsoló elemű 2 szintű inverteres frekvenciaváltó, passzív front-end-el, azaz a hálózatra nem tud visszatáplálni. \Aref{fig:family} táblázatban látható a jelenleg fejlesztett termék család. \todo{wikipédia hivatkozás}
+A Hyundai által jelenleg fejlesztett frekvenciaváltó család kis feszültségű, általános célú PWM vezérlet IGBT kapcsoló elemű 2 szintű inverteres frekvenciaváltó, passzív front-end-el, azaz a hálózatra nem tud visszatáplálni. \Aref{fig:family} táblázatban látható a jelenleg fejlesztett termék család.
 
 \begin{table}[]
 \centering
@@ -114,7 +114,7 @@ A frekvenciaváltók bemeneti fokozatára vagy DC vagy AC oldalon szokásos fojt
 
 A felépítés alapján elmondható, hogy egy ilyen termék összeállítása nagyon bonyolult feladat, sok területet lefed, sok féle kompetenciára van szükség. A teljesítmény elektronikai elemek és kapcsolálsok megtervezése gyakorlatilag csak az első gondolat. Ezen túl szükséges még a termikus méretezés, a vezérlő elektronikák tervezése, a különböző mérések megvalósítása. Amikor már ezzel is készen vagyunk, akkor a frekvenciaváltó tervezése elektronikai szempontból késznek mondható. Nem szabad megfeledkezni azonban arról, hogy ez egy készülék, melynek a mechanikus felépítéséről is gondoskodni kell. Itt kerülnek képbe a konstrukcióval foglalkozó gépész kollégák.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width = 0.8\textwidth]{figures/n700_proto.jpg}
 	\caption{Az elkészült Frame 1 prototípus} 
@@ -124,9 +124,8 @@ A felépítés alapján elmondható, hogy egy ilyen termék összeállítása na
 \paragraph{}
 A feladat már eddig is kellőképpen összetett volt, de a termékünk még mindig nem működő képes. Hiányzik belőle a szoftver, mely önmagában nagyon szerteágazó munka. Először is elő kell állítani a megfelelő szabályzókat, melyek segítségével elő tudunk állítani szinuszos kimenetet, gondoskodni kell a kapcsoló elemek vezérlő jelének megfelelő modulációjáról. Foglalkozni kell a magasabb szintű funkcionalitás megvalósításával, a különböző kommunikációs vonalak kezelésével, magának a rendszernek a menedzselésével. A HMI\footnote{Human-Machine Interface}-n is meg kell jelenteni információt, biztosítani kell lehetőséget a beavatkozásra. Amennyiben úgy gondolná az olvasó, hogy ez még nem annyira bonyolult, akkor figyelmébe ajánlom a PC-s szoftvert, melyet szintén különös gonddal el kell készíteni, ha egy jól használható terméket kívánunk előállatni, hiszen a felhasználó ezen keresztül fogja a legkönnyebben felkonfigurálni igényei szerint az eszközt.
 
-\todo[inline]{Félbehagyott gondolat}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width = \textwidth]{figures/architect.png}
 	\caption{A vezérlő elektronika blokkvázlata} 
