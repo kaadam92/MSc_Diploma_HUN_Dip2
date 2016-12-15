@@ -1,6 +1,6 @@
 \chapter{HIL felépítése}
 
-Nyilvánvaló tehát, hogy napjainkban, a modern teljesítmény elektronikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítmény elektronikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen javítható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépítése nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül. \cite{sutozoli}\cite{low_cost_rt_hil}\cite{hw_emu}
+Nyilvánvaló tehát, hogy napjainkban, a modern teljesítményelektronikai eszközök fejlesztéséhez elengedhetetlen a HIL szimulátor alkalmazása. Bár az eszköz fejlesztése jelentős terhet ró a készítőkre, segítségével csökkenthető a tervezésre fordítandó idő, a fejlesztési folyamatok párhuzamosításával. Segítségével elkerülhetőek a költséges és veszélyes hibák a fejlesztés alatt, hiszen a teljesítményelektronikai elemek csak matematikai modell formájában jelennek meg a rendszerben. Ezen felül a tesztelés minősége is jelentősen javítható a költségek csökkentése mellett. Ilyen szimulátorból sok futhat egymás mellett párhuzamosan, a valós elektronika többszöri felépítése nélkül. Így sok különböző teszteset futtatható egyszerre, akár ciklikusan, emberi felügyelet nélkül. \cite{sutozoli}\cite{low_cost_rt_hil}\cite{hw_emu}
 
 \section{Hardware felépítése}
 
@@ -24,13 +24,13 @@ MCB\_RxD       & Digital      & Bemenet      & MCB kommunikációs vonal (UART) 
 EEPROM\_SDA    & Digital      & Be/Kimenet   & EEPROM kommunikációs vonal (SPI)                 \\ \hline
 EEPAROM\_SCL   & Digital      & Kimenet      & EEPROM kommunikációs vonal (SPI)                 \\ \hline
 RectStatusC    & Digital      & Bemenet      & Egyenirányító státusz jel                        \\ \hline
-PrechargeCtrlX & Digital      &              & Előtöltő vezérlő jel                             \\ \hline
-IgbtBFltX      & Digital      &              & Fék IGBT meghajtó hibajel                        \\ \hline
-IgbtBRdy       & Digital      &              & Fék IGBT meghajtó státusz jel                    \\ \hline
-IgbtBRstX      & Digital      &              & Fék IGBT meghajtó reset jel                      \\ \hline
-IgbtPsuCtrlX   & Digital      &              & IGBT meghajtó tápegység vezérlő jel              \\ \hline
-IgbtInvFltX    & Digital      &              & Inverter IGBT meghajtó hiba jel                  \\ \hline
-IgbtInvRdy     & Digital      &              & Inverter IGBT meghajtó státusz jel               \\ \hline
+PrechargeCtrlX & Digital      & Kimenet             & Előtöltő vezérlő jel                             \\ \hline
+IgbtBFltX      & Digital      & Bemenet             & Fék IGBT meghajtó hibajel                        \\ \hline
+IgbtBRdy       & Digital      & Bemenet             & Fék IGBT meghajtó státusz jel                    \\ \hline
+IgbtBRstX      & Digital      & Kimenet             & Fék IGBT meghajtó reset jel                      \\ \hline
+IgbtPsuCtrlX   & Digital      & Kimenet             & IGBT meghajtó tápegység vezérlő jel              \\ \hline
+IgbtInvFltX    & Digital      & Bemenet             & Inverter IGBT meghajtó hiba jel                  \\ \hline
+IgbtInvRdy     & Digital      & Bemenet             & Inverter IGBT meghajtó státusz jel               \\ \hline
 IgbtInvRstX    & Digital      & Kimenet      & Inverter IGBT meghajtó hiba jel                  \\ \hline
 IgbtU1         & Digital      & Kimenet      & Az U fázis felső IGBT-t vezérlő PWM jel          \\ \hline
 IgbtU2         & Digital      & Kimenet      & Az U fázis felső IGBT-t vezérlő PWM jel          \\ \hline
@@ -189,7 +189,7 @@ A kártya teljes kapcsolási rajza a dolgozat függelékében megtalálható.
 
 \section{Simulink modell}
 
-A futtatandó modell magában foglalja a teljesítmény elektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossága volt azonban, hogy a DC-link feszültsége egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatását nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
+A futtatandó modell magában foglalja a teljesítményelektronikai elemek modelljét, egy motor modellt és egy mechanikai terhelés modellt. Hiányossága volt azonban, hogy a DC-link feszültsége egy konstans érték volt, így a különböző terhelések DC feszültségre való visszahatását nem lehetett vizsgálni. További hiányosság, hogy a hálózat paramétereit sem vette így figyelembe a modell.
 
 \subsection{A rendelkezésre álló modell}
 
